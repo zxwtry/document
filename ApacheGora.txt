@@ -1,0 +1,75 @@
+2010年9月22日，Gora进入到Apache孵化器
+Apache中与Hadoop相关的项目：
+    Apache Spark:       3,100,000
+    Apache HBase:       2,050,000
+    Apache Hive:        1,970,000
+    Apache Pig:         1,640,000
+    Apache Cassandra:   1,100,000
+    Apache Mahout:      577,000
+    Apache Avro:        376,000
+    Apache Ambari:      215,000
+    Apache Tez:         183,000
+    Apache Gora:        59,400
+可以明显看到，Apache Gora的中文检索数最少。作为Apache中与Hadoop相关的一个框架，我们有必要对Apache Gora有一个技术上的学习。
+
+Apache Gora Project 什么是Apache Gora Project
+The Apache Gora open source framework provides an in-memory data model and persistence for big data. Gora supports persisting to column stores, key value stores, document stores and RDBMSs, and analyzing the data with extensive Apache Hadoop MapReduce support.
+Apache Gora是一个开源大数据持久化框架并提供内存数据模型。Gora提供持久化到列存储(column stores)，键值存储(key value stores)，非表结构存储(document stores)和关系型数据库管理系统(RDBMSs)。Gora通过Hadoop MapReduce扩展来分析数据。
+Why Gora? 为什么选择Gora
+Although there are various excellent ORM frameworks for relational databases, data modeling in NoSQL data stores differ profoundly from their relational cousins. Moreover, data-model agnostic frameworks such as JDO are not sufficient for use cases, where one needs to use the full power of the data models in column stores. Gora fills this gap by giving the user an easy-to-use ORM framework with data store specific mappings and built in Apache Hadoop support.
+尽管关系型数据库有一系列优秀的ORM框架，NoSQL数据仓库的数据建模与关系型数据库有很大不同。此外，如果想要充分利用列存储的数据模型，以JDO为代表的不依赖具体实现的数据模型是远远不够的。Gora通过提供易于使用的ORM框架和数据仓库具体化映射和自带的Apache Hadoop支持，填补了这个空缺。
+The overall goal for Gora is to become the standard data representation and persistence framework for big data. The roadmap of Gora can be grouped as follows.
+    Data Persistence : Persisting objects to Column stores such as HBase, Cassandra, Hypertable; key-value stores such as Voldermort, Redis, etc; SQL databases, such as MySQL, HSQLDB, flat files in local file system or Hadoop HDFS.
+    Data Access : An easy to use Java-friendly common API for accessing the data regardless of its location.
+    Indexing : Persisting objects to Lucene and Solr indexes, accessing/querying the data with Gora API.
+    Analysis : Accesing the data and making analysis through adapters for Apache Pig, Apache Hive and Cascading
+    MapReduce support : Out-of-the-box and extensive MapReduce (Apache Hadoop) support for data in the data store.
+Gora的总体目标是成为大数据中数据呈现和持久化的标准。Gora的路线图以如下展示：
+    数据持久化：持久化对象到列存储(HBase,Cassandra,Hypertable)，键值存储(Voldermort,Redis)，SQL数据库(MySQL)，HSQLDB(没有关系结构的文件，在本地文件系统或HDFS)
+    数据存取：一个易于使用的通用API,Java友好，用于存取数据而不考虑数据的实际存储位置
+    数据检索：持久化对象到Lucene和Solr检索中，使用Gora API来存取和检索数据
+    数据分析：通过提供给Apache Pig,Apache Hive和Cascading的适配器，来存取数据和做数据分析
+    MapReduce支持：成熟易用有外延的MapReduce给数据仓库中的数据提供支持。
+Background
+ORM stands for Object Relation Mapping. It is a technology which abstacts the persistency layer (mostly Relational Databases) so that plain domain level objects can be used, without the cumbersome effort to save/load the data to and from the database. Gora differs from current solutions in that:
+    1, Gora is specially focussed at NoSQL data stores, but also has limited support for SQL databases.
+    2, The main use case for Gora is to access/analyze big data using Hadoop.
+    3, Gora uses Avro for bean definition, not byte code enhancement or annotations.
+    4, Object-to-data store mappings are backend specific, so that full data model can be utilized.
+    5, Gora is simple since it ignores complex SQL mappings.
+    6, Gora will support persistence, indexing and anaysis of data, using Pig, Lucene, Hive, etc.
+    For the latest information about Gora, please visit our website at:http://gora.apache.org 
+ORM是对象关系映射的简称。ORM技术抽象出持久化层，可以减少对数据库存取的繁重过程。Gora和现有解决方案的区别在于：
+    1,Gora专门聚焦在NoSQL数据仓库，同时对SQL数据库有有限的支持。
+    2,Gora的主要使用场景：使用Hadoop存取和分析大数据
+    3,Gora使用Avro作bean定义，而不是字节码或注释
+    4,Object-to-data存储映射是后端具体化的，那样的话就能够实现full-data-model
+    5,Gora忽略复杂的SQL映射，故Gora是简单的
+    6,Gora将会支持使用Pig,Lucene,Hive等来支持持久化，检索和数据分析
+    获取Gora的最新信息，访问http://gora.apache.org
+What Platform(s) does Gora work on? Gora运行在哪些平台
+Gora builds nightly on Ubuntu.
+The software has been tested and verified to run on the following platforms:
+    Mac OSX 10.9.3
+    Linux Mint
+    Ubuntu
+Gora does publish .zip artifacts for Windows users, however there is no gurantee of platform compatibility.
+Gora在Ubuntu平台上开发
+Gora已经在如下平台测试和认证：
+    Mac OSX 10.9.2
+    Linux Mint
+    Ubuntu
+Gora已经发布zip发行版供Windows用户，然而并不确保架构的通用性
+Which Languages/Technologies do I need to know to use Gora? 使用Gora需要哪些编程语言和技能
+    Gora is written in Java.
+    Configuration however requires a working knowledge of syntax for JSON and XML.
+    You should be able to use the command line terminal.
+    You should be able to use Apache Maven from the command line.
+    You should be able to edit simple flat files using a text editor.
+    Gora由Java语言编写
+    进行配置需要对JSON和XML语法有了解
+    需要能熟练使用Terminal
+    需要能够在Terminal中使用Apache Maven
+    需要有文本编辑能力
+
+
