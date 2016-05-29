@@ -1,5 +1,5 @@
 2010年9月22日，Gora进入到Apache孵化器
-Apache中与Hadoop相关的项目：
+Apache中与Hadoop相关的项目，它们在百度中的检索数:
     Apache Spark:       3,100,000
     Apache HBase:       2,050,000
     Apache Hive:        1,970,000
