@@ -151,4 +151,35 @@ GoraCI测试的分析：
 The key is that nodes only reference flushed nodes. Therefore a node should never reference a missing node, even if the ingest client is killed at any point in time.
 When running this test suite w/ Accumulo there is a script running in parallel called the Aggitator that randomly and continuously kills server processes.
 The outcome was that many data loss bugs were found in Accumulo by doing this. This test suite can also help find bugs that impact uptime and stability when run for days or weeks.
-核心是节点只引用刷新的节点。那样的话，一个节点应该引用一个丢失的节点，尽管任何节点任何时间被丢失。当运行测试套件Accumulo，有一个并行运行脚本叫Aggitator随机持续杀服务器进程。结果就是：在Accumulo，通过这样很多数据丢失BUG都被找到。
+核心是节点只引用刷新的节点。那样的话，一个节点应该引用一个丢失的节点，尽管任何节点任何时间被丢失。当运行测试套件Accumulo，有一个并行运行脚本叫Aggitator随机持续杀服务器进程。结果就是：通过这样Accumulo的很多数据丢失BUG都被找到。这个测试套件通过很多天很多个星期的测试，能够帮助找到影响运行时和稳定性的BUG。
+This test suite consists the following
+    a few Java programs
+    a little helper script to run the java programs
+    a maven script to build it.
+这个测试套件包含如下：
+    一些Java程序
+    一些帮助脚本来运行这些Java程序‘
+    一个maven脚本来build
+When generating data, its best to have each map task generate a multiple of 25 million. The reason for this is that circular linked list are generated every 25M. Not generating a multiple in 25M will result in some nodes in the linked list not having references. The loss of an unreferenced node can not be detected.
+当生成数据的时候，最好能生成一个千万级复合体。那样的原因是：每千万级会建立一个环链表。如果不生成千万级复合体，那样的话，在链表中的某些节点将会没有引用。没有引用节点的丢失是不能被检测的。
+Building GoraCI
+下载GoraCI，解压后，进入目录，运行
+    mvn install
+The maven pom file has some profiles that attempt to make it easier to run GoraCI against different Gora backends by copying the jars you need into lib. Before packaging its important to edit gora.properties and set it correctly for your datastore. To run against Accumulo do the following.
+maven相比自己手动拷jar包要方便得多了。在打包之前，需要编辑gora.properties并将它设置成你的数据仓库。
+针对运行Acumulo
+    vim src/main/resources/gora.properties //set Accumulo properties
+    mvn package -Paccumulo-1.4
+针对运行HBase
+    vim src/main/resources/gora.properties //set HBase properties
+    mvn package -Phbase-0.92
+运行Cassandra
+    vim src/main/resources/gora.properties //set Cassandra properties
+    mvn package -Pcassandra-1.1.2
+For other datastores mentioned in gora.properties, you will need to copy the appropriate deps into lib. Feel free to update the pom with other profiles, open a ticket or just send us a pull request.
+对于其他数据仓库在gora.properties中提到，需要复制适宜的依赖到lib里面。
+
+
+
+
+
