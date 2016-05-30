@@ -177,7 +177,68 @@ maven相比自己手动拷jar包要方便得多了。在打包之前，需要编
     vim src/main/resources/gora.properties //set Cassandra properties
     mvn package -Pcassandra-1.1.2
 For other datastores mentioned in gora.properties, you will need to copy the appropriate deps into lib. Feel free to update the pom with other profiles, open a ticket or just send us a pull request.
-对于其他数据仓库在gora.properties中提到，需要复制适宜的依赖到lib里面。
+对于其他数据仓库在gora.properties中提到，需要复制需要的依赖到lib里面。可以随意地更新pom文件里面的依赖信息。
+Java Class Description
+Below is a description of the Java programs
+    org.apache.gora.goraci.Generator - A map only job that generates data. As stated previously, its best to generate data in multiples of 25M.
+    org.apache.gora.goraci.Verify - A map reduce job that looks for holes. Look at the counts after running. REFERENCED and UNREFERENCED are ok, any UNDEFINED counts are bad. Do not run at the same time as the Generator.
+    org.apache.gora.goraci.Walker - A standalong program that start following a linked list and emits timing info.
+    org.apache.gora.goraci.Print - A standalone program that prints nodes in the linked list
+    org.apache.gora.goraci.Delete - A standalone program that deletes a single node
+    org.apache.gora.goraci.Loop - Runs generation and verify in a loop
+Java类描述
+下面是对Java项目的一个描述
+    org.apache.gora.goraci.Generator:一个生成数据的map only job。就像先前的一样，最好能生成一个千万级的复合体。
+    org.apache.gora.goraci.Verify:一个查找空洞的map reduce job。观察在运行之后的计数器。REFERENCED和UNREFERENCED都是正常的，任何UNDEFINED记数都是错误的。不要与Generator在一起运行。
+    org.apache.gora.goraci.Walker:一个独立运行程序，跟随一个链表启动并记录时间信息
+    org.apache.gora.goraci.Print:一个独立运行程序，输出链表中的节点
+    org.apache.gora.goraci.Delete:一个独立运行程序，删除一个单一的节点
+    org.apache.gora.goraci.Loop:在loop循环中运行生成和认证程序。
+goraci.sh is a helper script that you can use to run the above programs. It assumes all needed jars are in the lib dir. It does not need the package name. You can just run goraci.sh Generator, below is an example.
+    $ ./goraci.sh Generator
+    Usage : Generator <num mappers> <num nodes>
+For Gora to work, it needs a gora.properties file on the classpath and a gora-$datastore-mapping.xml mapping file on the classpath, the contents of both are datastore specific, more details can be found here [2]. You can edit the ones in src/main/resources and build the goraci-${version}-SNAPSHOT.jar with those. Alternatively remove those and put them on the classpath through some other means.
+goraci.sh一个帮助脚本，可以用它来运行下面的程序。它假定所有需要的jar包都在lib文件夹中。它不需要包名。下面是运行goraci.sh的指南：
+    $ ./goraci.sh Generator
+    Usage : Generator <num mappers> <num nodes>
+想要Gora正常运行，需要一个gora.properties文件在classpath和一个gora-$datastore-mapping.xml的mapping文件在classpath，这两个文件是依据数据仓库来自定义的。
+Gora and Hadoop Gora和Hadoop
+Gora uses Apache Avro which uses a Json library that Hadoop has an old version of. The two libraries jackson-core and jackson-mapper need to be updated in $HADOOP_HOME/lib and $HADOOP_HOME/share/hadoop/lib/. Currently these are updated to jackson-core-asl-1.4.2.jar and jackson-mapper-asl-1.4.2.jar. For details see HADOOP-6945.
+Gora使用有Json库Apache Avro。jackson-core和jackson-mapper两个类需要添加到$HADOOP_HOME/lib和$HADOOP_HOME/share/hadoop/lib/。目前最新版本是jackson-core-asl-1.4.2.jar和jackson-mapper-asl-1.4.2.jar。
+GoraCI and HBase GoraCI和HBase
+To improve performance running read jobs such as the Verify step, enable scanner caching on the command line. For example:
+    $ ./gorachi.sh Verify -Dhbase.client.scanner.caching=1000 \
+   -Dmapred.map.tasks.speculative.execution=false verify_dir 1000
+来改进运行read jobs的性能，以Verify阶段，让scanner扑捉控制台，例如：
+    $ ./gorachi.sh Verify -Dhbase.client.scanner.caching=1000 \     
+    -Dmapred.map.tasks.speculative.execution=false verify_dir 1000 
+Dependent on how you have your Hadoop and HBase setup deployed, you may need to change the gorachi.sh script around some. Here is one suggestion that may help in the case where your Hadoop and HBase configuration are other than under the Hadoop and HBase home directories.
+依赖于Hadoop和HBase是如何部署的，你可能需要修改gorachi.sh脚本。下面是推荐配置：
+    iff --git a/org.apache.gora.goraci.sh b/org.apache.gora.goraci.sh
+    index db1562a..31c3c94 100755
+    --- a/org.apache.gora.goraci.sh
+    +++ b/org.apache.gora.goraci.sh
+    @@ -95,6 +95,4 @@ done
+     #run it
+     export HADOOP_CLASSPATH="$CLASSPATH"
+     LIBJARS=`echo $HADOOP_CLASSPATH | tr : ,`
+     -hadoop jar "$GORACI_HOME/lib/org.apache.gora.goraci-0.0.1-SNAPSHOT.jar" $CLASS -libjars "$LIBJARS" "$@"
+     -
+     -
+     +CLASSPATH="${HBASE_CONF_DIR}" hadoop --config "${HADOOP_CONF_DIR} jar "$GORACI_HOME/lib/org.apache.gora.goraci-0.0.1-SNAPSHOT.jar" $CLASS -files "${HBASE_CONF_DIR}/hbase-site.xml" -libjars "$LIBJARS" "$@"
+
+You will need to define HBASE_CONF_DIR and HADOOP_CONF_DIR before you run your goraci jobs. For example:
+在运行goraci jobs之前，需要编辑HBASE_CONF_DIR和HADOOP_CONF_DIR，例如
+    $ export HADOOP_CONF_DIR=/home/you/hadoop-conf
+    $ export HBASE_CONF_DIR=/home/you/hbase-conf
+    $ PATH=/home/you/hadoop-1.0.2/bin:$PATH ./goraci.sh Generator 1000 1000000
+Concurrency 并发性
+Its possible to run verification at the same time as generation. To do this supply the -c option to Generator and Verify. This will cause Genertor to create a secondary table which holds information about what verification can safely verify. Running Verify with the -c option will make it run slower because more information must be brought back to the client side for filtering purposes. The Loop program also supports the -c option, which will cause it to run verification concurrently with generation.
+If verification is run at the same time as generation without the -c option, then it will inevitably fail. This is because verification mappers read different parts of the table at different times and giving an inconsistent view of the table. So one mapper may read a part of a table before a node is written, when the node is later referenced it will appear to be missing. The -c option basically filters out newer information using data written to the secondary table.
+同时运行verification和generation是可能的。为了同时运行，提供-c来同时运行Gererator和Verify。这会导致Generator来创建一个secondary table来持有verification能够认证的信息。通过-c运行Verify将会将运行更慢，因为更多信息将会带到客户一端来过滤意图。通过-c运行Loop
+同时运行verification和generation是可能的。为了同时运行，提供-c来同时运行Gererator和Verify。这会导致Generator来创建一个secondary table来持有verification能够认证的信息。通过-c运行Verify将会将运行更慢，因为更多信息将会带到客户一端来过滤意图。通过-c运行Loop
+
+
 
 
 
