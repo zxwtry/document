@@ -131,4 +131,24 @@ Essentially the test runs many ingest clients that continually create linked lis
 The nodes in the linked list are random. This causes each linked list to spread across the table. Therefore if one part of a table loses data, then it will be detected by references in another part of the table.
 This project is a version of the test suite written using Apache Gora [1]. Goraci has been tested against Accumulo and HBase.
 Apache Accumulo 有一个测试套件用于保证数据在大规模应用中不会丢失。这个测试套件被叫做持续获取。
-本质上，
+本质上，这测试运行很多客户端，创建了包含25,000,000个节点。在某一点，客户端被停止和一个map reduce任务运行到保证链表没有空洞。空洞的意思是数据丢失。
+在链表中的节点是随机的。这引起每一个链表跨表传播。由此，如果一个表中的一部分失去了数据，那样的话，丢失的数据将会在表的另外一个部分检测出来。
+这个项目是一个使用Gora测试套件版本。Goraci已经被Accumulo和HBase测试。
+The Anatomy of GoraCI tests
+Below is rough sketch of how data is written. For specific details look at the Generator code
+    1,Write out 1 million nodes
+    2,Flush the client
+    3,Write out 1 million that reference previous million
+    4,If this is the 25th set of 1 million nodes, then update 1st set of million to point to last
+    5,goto 1
+GoraCI测试的分析：
+下面是数据如何被写入的草图。查看代码来看说明细节：
+    1,写出百万级节点
+    2,刷新节点
+    3,写出百万级节点引用前面的百万级节点
+    4,如果这是第25套百万级节点，然后更新第一套百万级节点指向最后的百万级节点。
+    5,回到1
+The key is that nodes only reference flushed nodes. Therefore a node should never reference a missing node, even if the ingest client is killed at any point in time.
+When running this test suite w/ Accumulo there is a script running in parallel called the Aggitator that randomly and continuously kills server processes.
+The outcome was that many data loss bugs were found in Accumulo by doing this. This test suite can also help find bugs that impact uptime and stability when run for days or weeks.
+核心是节点只引用刷新的节点。那样的话，一个节点应该引用一个丢失的节点，尽管任何节点任何时间被丢失。当运行测试套件Accumulo，有一个并行运行脚本叫Aggitator随机持续杀服务器进程。结果就是：在Accumulo，通过这样很多数据丢失BUG都被找到。
