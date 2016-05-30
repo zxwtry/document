@@ -73,3 +73,62 @@ Which Languages/Technologies do I need to know to use Gora? 使用Gora需要哪�
     需要有文本编辑能力
 
 
+Gora Modules Gora模块
+Gora source code is organized in a modular architecture. The gora-core module is the main module which contains the core of the code. All other modules depend on the gora-core module. Each datastore backend in Gora resides in it's own module. The documentation for the specific module can be found at the module's documentation directory.
+Gora源代码以模块化架构组织。Gora核心模块是包含代码核心的主模块。所有其他的模块依赖于主模块。以Gora为后端的每一个数据仓库都座落在它自己的仓库中。在模块文档中可以找到每一个具体模块的文档。
+It is wise so start with going over the documentation for the gora-core module and then the specific data store module(s) you want to use. The following modules are currently implemented in Gora.
+    gora-compiler: A page dedicated to the GoraCompiler; a critical part of the Gora workflow;
+    gora-compiler-cli: A page dedicated to the GoraCompiler Command Line Interface; a utility module for working with the Gora Compiler;
+    gora-shims-hadoop: Base module enabling us to use Gora with multiple versions of Hadoop in a flexible manner;
+    gora-shims-hadoop-1.x: Module enabling us to use Gora with Hadoop 1.X;
+    gora-shims-hadoop-2.x: Module enabling us to use Gora with Hadoop 2.X;
+实现自己的数据仓库之前，过一遍Gora核心文档是非常有必要的。下面是Gora目前已经实现的模块：
+    gora-compiler:用于GoraCompiler的一章，是Gora工作流中至关重要的一部分
+    gora-compiler-cli:用于GoraCompiler命令控制台接口的一章，是GoraCompiler中的公共模块。
+    gora-shims-hadoop:能够以灵活的方式兼容多版本的Hadoop
+    gora-shims-hadoop-1.x:兼容Hadoop1.X的模块
+    gora-shims-hadoop-2.x:兼容Hadoop2.X的模块
+    gora-shims-hadoop-distribution: Packaging container module enabling easier dependency management whilst working with Gora Shims;
+    gora-core: Module containing core functionality, AvroStore and DataFileAvroStore stores, GoraSparkEngine;
+    gora-accumulo: Module for Apache Accumulo backend and AccumuloStore implementation;
+    camel-gora: An Apache Camel component that allows you to work with NoSQL databases using Gora;
+    gora-cassandra: Module for Apache Cassandra backend and CassandraStore implementation;
+    gora-dynamodb: Module for Amazon DynamoDB backend and DynamoDBStore implementation;
+    gora-hbase: Module for Apache HBase backend and HBaseStore implementation;
+    gora-metamodel: Module for Apache MetaModel backend and query functionality;
+    gora-mongodb: Module for MongoDB backend and MongoStore implementation;
+    gora-solr: Module for Apache Solr backend and SolrStore implementation;
+    gora-tutorial: The Gora LogManager tutorial;
+    gora-sources-dist: Packaging module used to build and distribute Gora sources during project releases;
+    gora-shims-hadoop-distribution:打包容器模块，简化依赖管理，与Gora Shims协同工作。
+    gora-core:包含主要功能的模块，包含AvroStore和DataFileAcroStore仓库，GoraSparkEngine
+    gora-accumulo:Apache Accumulo后端模块，AcumuloStore实现模块。
+    camel-gora:一个Apache Camel组件，通过Gora来运行NoSQL
+    gora-cassandra:Apacha Cassandra后端模块和Cassandra实现模块。
+    gora-dynamodb:Amazon DynamoDb后端模块和DamoDBStore实现模块。
+    gora-hbase:Apache HBase后端模块和HBaseStore实现模块。
+    gora-metamodel:Apache MetaModel后端实现和查询功能模块。
+    gora-mongodb:MongoDB后端模块和MongoStore实现模块
+    gora-solr:Apache Solr后端模块和SolrStore实现模块
+    gora-tutorial:Gora LogManager监管
+    gora-sources-dist:在项目发行阶段，用于打包模块和发布Gora源代码
+Gora Testing Gora测试
+Gora currently has two testing mechanisms * JUnit Tests: These are included for every module which provides a DataStore within Gora. * Integration Tests: A custom testing suite called GoraCI (Continuous Ingestion) which stress tests Gora functionality at scale.
+Gora目前有两个测试机制:JUnit Tests(在有Gora的每一个数据仓库模块中，都有JUnit Tests)和Integration Tests(一个叫GoraCI的自定义测试组件，在一定规模上对Gora功能进行压力测试)
+JUnit Tests:
+Unit tests in Gora are implemented using the popular JUnit framework. Each module which implements the DataStore interface similarly implements a DataStoreTestBase API which test utilities for DataStores. The DataStoreTestBase class delegates actual test execution to DataStoreTestUtil.
+Gora中的单元测试使用流行的JUnit框架实现。实现数据仓库接口的每一个模块，同样实现了用来测试数据仓库功能的DataStoreTestBase API。DataStoreTestBase类将实际测试执行委托给DataStoreTestUtil。
+The tests begin in a fairly trivial fashion testing functionality like datastore schema creation schema deletion, etc and continue in this manner getting progressively more complex as we begin testing some more advanced features within the Gora API. In addition to the unit tests contained within this class, the best place to look for API functionality is at the examples directories under various Gora modules. Most modules contain a /src/examples/ directory under which some example classes can be found. Specifically, there are some classes that are used for tests under gora-core/src/examples/.
+测试以细致琐碎的方式来开始进行测试，如数据仓库建表和删表的测试。通过Gora API以类似的方式，进一步来测试Gora的高级特性。查看API功能的最佳是Gora模块的实例中。大部分模块中包中/src/examples/目录，里面放着一些实例。
+GoraCI Integration Testsing Suite GoraCI整合测试套件
+Background
+Since Gora 0.5, the GoraCI suite has been part of the mainstream Gora codebase.
+Credit for GoraCI can be handed to Keith Turner (Gora PMC member) for his foresight in developing GoraCI which we have now extended from gora-accumulo to the entire suite of Gora modules.
+自Gora 0.5起，GoraCI已经成为主流Gora编码的一部分
+GoraCI的荣誉归功于Keith Turner，用于嘉奖他在开发GoraCI的远见，由此GoraCI已经从gora-accumulo扩展到真个Gora模块套件中。
+Apache Accumulo has a test suite that verifies that data is not lost at scale. This test suite is called continuous ingest.
+Essentially the test runs many ingest clients that continually create linked lists containing 25 million nodes. At some point the clients are stopped and a map reduce job is run to ensure no linked list has a hole. A hole indicates data was lost.
+The nodes in the linked list are random. This causes each linked list to spread across the table. Therefore if one part of a table loses data, then it will be detected by references in another part of the table.
+This project is a version of the test suite written using Apache Gora [1]. Goraci has been tested against Accumulo and HBase.
+Apache Accumulo 有一个测试套件用于保证数据在大规模应用中不会丢失。这个测试套件被叫做持续获取。
+本质上，
