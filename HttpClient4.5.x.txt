@@ -1,0 +1,41 @@
+source: http://hc.apache.org/httpcomponents-client-4.5.x/index.html
+path:   HttpClient --> Apache.org --> Components --> HttpClient4.5
+[HttpClient Overview]
+    The Hyper-Text Transfer Protocol (HTTP) is perhaps the most significant protocol used on the Internet today. Web services, network-enabled appliances and the growth of network computing continue to expand the role of the HTTP protocol beyond user-driven web browsers, while increasing the number of applications that require HTTP support.
+    Although the java.net package provides basic functionality for accessing resources via HTTP, it doesn't provide the full flexibility or functionality needed by many applications. HttpClient seeks to fill this void by providing an efficient, up-to-date, and feature-rich package implementing the client side of the most recent HTTP standards and recommendations.
+    Designed for extension while providing robust support for the base HTTP protocol, HttpClient may be of interest to anyone building HTTP-aware client applications such as web browsers, web service clients, or systems that leverage or extend the HTTP protocol for distributed communication.
+    robust:健壮的
+[Documentation]
+    Quick Start - contains a simple, complete example of an HTTP GET and POST with parameters.
+    HttpClient Tutorial - gives a detailed examination of the HttpClient API, which was written in close accordance with the (sometimes not very intuitive) HTTP specification/standard. A copy is also shipped with the release. A PDF version is also available
+    HttpClient Examples - a set of examples demonstrating some of the more complex behavior.
+    HttpClient Primer - explains the scope of HttpClient. Note that HttpClient is not a browser. It lacks the UI, HTML renderer and a JavaScript engine that a browser will possess.
+    Project reports[omit]
+        HttpClient
+        HC Fluent
+        HttpMime
+        HttpClient Cache
+        HttpClient OSGi
+    Quick Start:    http://hc.apache.org/httpcomponents-client-4.5.x/quickstart.html
+    HttpClient Tutorial:    http://hc.apache.org/httpcomponents-client-4.5.x/tutorial/html/index.html
+    HttpClient Examples:    http://hc.apache.org/httpcomponents-client-4.5.x/examples.html
+    HttpClient Primer:      http://hc.apache.org/httpcomponents-client-4.5.x/primer.html
+[Features]
+    1,  Standards based, pure Java, implementation of HTTP versions 1.0 and 1.1
+    2,  Full implementation of all HTTP methods (GET, POST, PUT, DELETE, HEAD, OPTIONS, and TRACE) in an extensible OO framework.
+    3,  Supports encryption with HTTPS (HTTP over SSL) protocol.
+    4,  Transparent connections through HTTP proxies.
+    5,  Tunneled HTTPS connections through HTTP proxies, via the CONNECT method.
+    6,  Basic, Digest, NTLMv1, NTLMv2, NTLM2 Session, SNPNEGO, Kerberos authentication schemes.
+    7,  Plug-in mechanism for custom authentication schemes.
+    8,  Pluggable secure socket factories, making it easier to use third party solutions
+    9,  Connection management support for use in multi-threaded applications. Supports setting the maximum total connections as well as the maximum connections per host. Detects and closes stale connections.
+    10, Automatic Cookie handling for reading Set-Cookie: headers from the server and sending them back out in a Cookie: header when appropriate.
+    11, Plug-in mechanism for custom cookie policies.
+    12, Request output streams to avoid buffering any content body by streaming directly to the socket to the server.
+    13, Response input streams to efficiently read the response body by streaming directly from the socket to the server.
+    14, Persistent connections using KeepAlive in HTTP/1.0 and persistance in HTTP/1.1
+    Direct access to the response code and headers sent by the server.
+    The ability to set connection timeouts.
+    Support for HTTP/1.1 response caching.
+    Source code is freely available under the Apache License.

@@ -1,0 +1,41 @@
+source: http://jmeter.apache.org/
+[Apache JMeter]
+    The Apache JMeter™ application is open source software, a 100% pure Java application designed to load test functional behavior and measure performance. It was originally designed for testing Web Applications but has since expanded to other test functions.
+    JMeter用来测试功能和度量性能。本来是用于Web项目，现在都可以使用。
+[What can I do with it?]
+    Apache JMeter may be used to test performance both on static and dynamic resources (Webservices (SOAP/REST), Web dynamic languages - PHP, Java, ASP.NET, Files, etc. -, Java Objects, Data Bases and Queries, FTP Servers and more). It can be used to simulate a heavy load on a server, group of servers, network or object to test its strength or to analyze overall performance under different load types. You can use it to make a graphical analysis of performance or to test your server/script/object behavior under heavy concurrent load.
+    能够用来模拟并行大负载
+[What does it do?]
+    Apache JMeter features include:
+    Ability to load and performance test many different server/protocol types:
+        Web - HTTP, HTTPS
+        SOAP / REST
+        FTP
+        Database via JDBC
+        LDAP
+        Message-oriented middleware (MOM) via JMS
+        Mail - SMTP(S), POP3(S) and IMAP(S)
+        Native commands or shell scripts
+        TCP
+    Complete portability and 100% Java purity.
+    Full multithreading framework allows concurrent sampling by many threads and simultaneous sampling of different functions by separate thread groups.
+    Careful GUI design allows faster Test Plan building and debugging.
+    Caching and offline analysis/replaying of test results.
+    Highly Extensible core:
+        Pluggable Samplers allow unlimited testing capabilities.
+        Several load statistics may be chosen with pluggable timers.
+        Data analysis and visualization plugins allow great extensibility as well as personalization.
+        Functions can be used to provide dynamic input to a test or provide data manipulation.
+        Scriptable Samplers (BeanShell, BSF-compatible languages and JSR223-compatible languages)
+[JMeter is not a browser]
+    JMeter is not a browser. As far as web-services and remote services are concerned, JMeter looks like a browser (or rather, multiple browsers); however JMeter does not perform all the actions supported by browsers. In particular, JMeter does not execute the Javascript found in HTML pages. Nor does it render the HTML pages as a browser does (it's possible to view the response as HTML etc., but the timings are not included in any samples, and only one sample in one thread is ever viewed at a time).
+    render: 报答，呈递，翻译，致使
+    不运行Javascript程序
+[How do I do it?]
+    Using JMeter : http://jmeter.apache.org/usermanual/index.html
+    JMeter Wiki : http://wiki.apache.org/jmeter/
+    JMeter FAQ (Wiki) : http://wiki.apache.org/jmeter/JMeterFAQ
+    Javadoc API documentation : http://jmeter.apache.org/api/index.html
+    JMeter Localisation (Translator's Guide) : http://jmeter.apache.org/localising/index.html
+    Building JMeter and Add-Ons : http://jmeter.apache.org/building.html
+    
