@@ -39,3 +39,4 @@ source: http://jmeter.apache.org/
     JMeter Localisation (Translator's Guide) : http://jmeter.apache.org/localising/index.html
     Building JMeter and Add-Ons : http://jmeter.apache.org/building.html
     
+source: http://jmeter.apache.org/usermanual/get-started.html
