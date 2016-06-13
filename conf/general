@@ -1,0 +1,173 @@
+i各种配置
+配置001：mysql 声音
+1. 禁用“嘀嘀”声的设备来源，这是由beep驱动服务所提供，可以将beep驱动的启动类型设置为禁用，可以打开CMD窗口，运行以下命令：
+sc config beep start= disabled
+2. 停止beep驱动，可以运行以下命令：
+sc stop beep
+
+
+virtualbox
+	使用 ifconfig 能够查看ip , netmask , Bcast 等信息
+	如果需要查看DNS-nameserver等信息
+	使用 cat /etc/resolv.conf
+	查看网关信息： netstat -rn
+
+
+设置固定ip，
+修改 /etc/network/interfaces
+	将auto eth0下面的东西修改成为：
+		iface eth0 inet static
+		address [自己定义的ip]
+		netmask [参看修改之前的]
+		gateway
+
+Linux允许root远程ssh登陆
+	vim /etc/ssh/sshd_config
+		将PermitRootLogin without-password 修改为 PermitRootLogin yes
+	重启ssh服务
+		service ssh restart
+
+Chrome插件，不是从Chrome市场上面下的不让用的解决方法：
+	URL ：http://www.tuicool.com/articles/fArIvq
+	win+r 输入gpedit.msc
+	添加chrome.adm（在email里有）
+	计算机配置 --> 管理模板 --> 经典管理模板(ADM) --> Google --> GoogleChrome --> 扩展程序 --> 配置扩展程序白名单 --> 将扩展程序的ID复制进去 -- > 重启Chrome
+
+Linux命令
+	du  -h  --max-depth=1  /root
+	查看 /root目录下面 遍历深度是1 的所有文件夹/文件的大小
+
+Linux 文件
+	ubuntu　通过 apt-get install 下载的安装包在
+	/var/cache/apt/archives/　　文件夹里面
+
+Linux 文件
+	find /root  -maxdepth 1 -name "@*"
+	意思是：1 == 在/root目录下查找　以@开头的文件或目录
+
+Vim 
+	:.s/form/to/g
+	:10,20s/from/to/g
+	:1,.s/from/to/g	从第一行到当前行的内容进行替换
+	:.,$s/from/to/g	从当前行到最后一行的内容进行替换
+
+Linux 修改计算机名字
+	vim /etc/hostname
+	vim /etc/hosts
+	
+
+Linux 忽略 konw_hosts　登陆
+	/etc/ssh/ssh_config 将StrictHostKeyChecking ask 设置为 no
+	再重启 ssh 服务 
+
+Linux　直接 SSH 无密码登陆
+	1，	生成 id_rsa.pub ：
+		ssh-keygen，一路回车
+	2，	添加 id_rsa.pub 到　
+		cat id_master.pub |tee -a authorized_keys
+		cat id_master.pub >> authorized_keys
+
+Linux 输出内容到文件
+	１，输出内容到单个文件
+		echo "Hello World" >> a.txt
+		echo "Hello World" |tee a.txt
+		以追加的方式：
+			echo "HelloWorld" |tee -a a.txt
+	２，输出内容到多个文件
+		echo "Hello World" |tee a.txt b.txt c.txt
+		以追加的方式：
+			echo "Hello World" |tee -a a.txt b.txt c.txt
+	３，从文件到文件
+		cat a.txt >> b.txt
+	４，从文件到多个文件
+		cat a.txt |tee b.txt c.txt
+		以追加的方式：
+			cat a.txt |tee -a b.txt c.txt
+
+Linux 使用 apt-get install openjdk-7-jdk 自动安装的java
+	那么java　的安装目录是：　 /usr/lib/jvm/java-7-openjdk-amd64/
+
+Linux  tar　的使用
+	1，	tar 打包　　　tar -cvf A.tar *
+		tar 解包　　　tar -xvf A.tar 
+		tar 增加		 tar -rvf A.tar new.txt
+		tar 查看文件内容　 tar -tvf A.tar
+		tar 解包中某个     tar -xvf A.tar new.txt
+
+		-c ：建立一个压缩文件的参数指令(create 的意思)；
+		-x ：解开一个压缩文件的参数指令；
+		-t ：查看 tarfile 里面的文件；
+		-z ：是否同时具有 gzip 的属性？亦即是否需要用 gzip 压缩；
+		-j ：是否同时具有 bzip2 的属性？亦即是否需要用 bzip2 压缩；
+		-v ：压缩的过程中显示文件！这个常用，但不建议用在背景执行过程；
+		-f ：使用档名，请留意，在 f 之后要立即接档名，不要再加参数；
+		-p ：使用原文件的原来属性（属性不会依据使用者而变）；
+		-N ：比后面接的日期(yyyy/mm/dd)还要新的才会被打包进新建的文件中；
+		--exclude FILE：在压缩的过程中，不要将 FILE 打包。
+	
+	2，gzip　压缩
+		-c 将输出写到标准输出上，并保留原有文件。
+		-d 将压缩文件解压。
+		-l 对每个压缩文件，显示下列字段：
+			压缩文件的大小；未压缩文件的大小；压缩比；未压缩文件的名字
+		-r 递归式地查找指定目录并压缩其中的所有文件或者是解压缩。
+		-t 测试，检查压缩文件是否完整。
+		-v 对每一个压缩和解压的文件，显示文件名和压缩比。
+		-num 用指定的数字 num 调整压缩的速度，-1 或 --fast 表示最快压缩方法（低压缩比），
+		-9 或--best表示最慢压缩方法（高压缩比）。系统缺省值为 6。
+		指令实例：
+		gzip *
+		% 把当前目录下的每个文件压缩成 .gz 文件。
+		gzip -dv *
+		% 把当前目录下每个压缩的文件解压，并列出详细的信息。
+		gzip -l *
+		% 详细显示例1中每个压缩的文件的信息，并不解压。
+		gzip usr.tar
+		% 压缩 tar备份文件usr.tar，此时压缩文件的扩展名为.tar.gz。
+
+Linux  对于 U 盘，　Desktop　可能会自动挂载，　在 /media/zxwtry/　目录下
+	Linux 挂载的方法：
+
+Linux vim 空格配置
+	设置成为tab 四个空格:
+		set ts=4
+		set expandtab
+	对于已经保存的文件，空格与tab替换的方法如下：
+		tab 替换成空格：
+			:set ts=4
+			:set expandtab
+			:%retab!
+		空格替换为tab
+			:set ts=4
+			:set noexpandtab
+			:%retab!
+		注：加!是用于处理非空白字符之后的tab，即所有的tab；如果不家!，则只处理行首的tab
+
+Hadoop  add datanode
+	先做好配置准备 : hosts ssh etc/.haoop/slaves ...
+	sbin/hadoop-daemon.sh start datanode
+	sbin/yarn-daemon.sh start nodemanager
+	sbin/start-balancer.sh -threshold 5
+	bin/hdfs dfsadmin -setBalancerBandwidth 67108864
+	16777216
+
+Linux
+	echo $?
+	关闭自动启动：		chkconfig NetworkManager off
+	
+Ubuntu 安装numpy和sklearn
+	apt-get install python-pip
+	pip install -U scikit-learn
+
+Ubuntu 缩短终端路径名
+	ubuntu总是显示全路径名，路径比较长的时候，会非常不方便。centos就是使用简化路径名。ubuntu需要做的修改如下：
+	vim ~/.bashrc
+	找到内容：
+    if [ "$color_prompt" = yes ]; then
+        PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+    else
+        PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
+	需要的操作是将w更改成W就行了。退出终端，从新进入就好了。
+
+Linux 挂载ntfs的方法
+	

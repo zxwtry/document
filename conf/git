@@ -1,0 +1,48 @@
+1,  准备
+    1.1 安装
+        a,  ubuntu 
+	        apt-get install git
+	        这条语句一般能够完全安装好
+	        如果不行的话，一般是网络问题可以试试deb.tar(16/06/14)
+        b,  老一点的Debian或ubuntu 
+            apt-get install git-core
+            原因是，之前有一个软件叫做GIT(GNU Interactive Tools),后来更名为gnuit
+        c,  其他linux版本，通过源码安装
+            ./config
+            make
+            sudo make install
+        d,  Mac OS X和Windows多百度
+    1.2 简单使用
+        a,  初始化
+                git init
+                git remote add origin [git_url]
+            或
+            复制git clone [git_url]
+        b,  设置user.name和user.email，还要添加id_rsa.pub
+            git config --global user.name "zxwtry"
+            git config --global user.email "zxwtry@qq.com"
+            [system --> 作用域：整个电脑    /etc/gitconfig  ]
+            [global --> 作用域：该用户      ~/.gitconfig    ]
+            [       --> 作用域：当前项目    .git/config     ]
+        c,  git add *
+            git commit -am "添加的注释"
+            git push origin master
+        d,  查看版本信息和版本回溯
+            git log --pretty=oneline
+            git reset --hard 前几位
+                      --soft
+                      --mixed
+            git reflog
+            git reset --hard HEAD^1     向下走一位
+        e,  一次后悔的机会
+            git commit -am "注释信息" --amend
+        f,  分支branch
+            git branch          查看库中的所有分支，打*代表当前
+            git branch dev  
+            git checkout dev    建立一个新的branch
+            git merge dev
+            git branch --delete dev
+            git push -u origin master  强制使用现在push的master
+        g,  不同电脑，同一个项目
+            git fetch --all
+            git reset --hard origin/master
