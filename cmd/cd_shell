@@ -1,0 +1,6 @@
+#!/bin/bash
+cd /home/zxwtry/
+mkdir hello
+cd hello
+rm -rf t
+echo "aabb" >> t
