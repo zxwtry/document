@@ -170,4 +170,11 @@ Ubuntu 缩短终端路径名
 	需要的操作是将w更改成W就行了。退出终端，从新进入就好了。
 
 Linux 挂载ntfs的方法
-	
+    1,  安装ntfs-3g
+    2,  mount -t ntfs-3g /dev/sda2 /ntfs
+    3,  使用fdisk -l查看磁盘挂载点
+    如果需要开机挂载的话，
+        vi /etc/fstab　文件结尾添加需要挂载的ntfs盘
+        添加的命令是：  /dev/sda2 /ntfs ntfs-3g default 0 0	
+
+
