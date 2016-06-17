@@ -1,0 +1,48 @@
+#这是读书笔记
+#书名：Linux C 编程从基础到实践(程国钢 张玉兰 编著) 清华大学出版社
+#
+01, 第一章  Linux 使用基础
+    001 mkdir -m 710 chap1
+        -m  配置权限选项
+        710 每位数字是4+2+1形式
+            4:r 2:w 1:x
+            首位:目录所有者权限
+            中位:组中其他人对目录的权限
+            末位:系统中其他人对目录的权限
+    002 mkdir -p  /home/case1/case2/case3
+        -p  如果中间目录不存在，会自动创建
+    003 rmdir chap1
+        删除chap1目录，如果目录不为空，抛错
+    004 rmdir -p chap/chap1/chap2/chap3/
+        删除chap3的同时，如果上一级目录为空，继续删除上一级
+        如果某一级有空文件夹或者文件，会报错，但出错之前的文件夹会删除的。
+    005 cd c[*?]    注:当前目录下有目录c0000 c1 c2
+        cd c*   进入c0000
+        cd c?   进入c1
+    006 三个特殊目录: /  .  ..
+        /   根目录
+        .   当前目录
+        ..  上一级目录
+    007 ubuntu 14.04 自带的所有alias
+        alias egrep='egrep --color=auto'
+        alias fgrep='fgrep --color=auto'
+        alias grep='grep --color=auto'
+        alias l='ls -CF'
+        alias la='ls -A'
+        alias ll='ls -alF'
+        alias ls='ls --color=auto'
+    008 ls的所有选项
+        -a  横着排，包括.开头
+        -b  step1:vim \\a   step2:ls (\a)   step3:ls -b (\\a)
+            不可输出字符用反斜线加字符列出
+        -i  step1:echo "aa" >> a   step2:ls -i (403224 a)   step3:echo "bb" >> b  
+            step4:ls -i (403224 a   403229 b)   step5:mkdir c   
+            step6:ls -i (403224 a  403229 b  403235 c)
+            列出文件i节点的索引信息
+        -k  使用1024-byte快，有疑惑
+        -m  横着排，用","分割
+        -n  用数字的UID, GID代替名称
+        -o  显示文件的详细信息，除了组信息
+        -p-F     
+
+
