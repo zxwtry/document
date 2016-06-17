@@ -1,0 +1,4 @@
+001访问新浪微博图片，重定向到西安交大校内网的cache中
+    访问的url是：   http://ww1.sinaimg.cn/large/bfc243a3gw1f3zzc2qt1yj20xc1dy1kz.jpg
+    被重定向到：    http://202.117.4.100/cache/1/04/sinaimg.cn/bddc184d736ddcda8eabfb622e3b40f5/bfc243a3gw1f3zzc2qt1yj20xc1dy1kz.jpg
+
