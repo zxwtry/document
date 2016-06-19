@@ -380,9 +380,34 @@
                 如果发现共享函数库name.so，则使用name.so进行动态链接
     033 gcc支持的与C语言相关的输入文件类型
         .c  C语言源程序，可以被gcc预处理、编译、汇编、链接
-        .C .cc .cp .cpp .c++ cxx    C++语言源程序，可以被gcc预处理、编译、汇编、链接
-        .i  
+        .C .cc .cp .cpp .c++ .cxx    C++语言源程序，可以被gcc预处理、编译、汇编、链接
+        .i  预处理后的C语言源程序，可以被gcc编译、汇编、链接
+        .ii 预处理后的C++语言源程序，可以被gcc编译、汇编、链接
+        .s  预处理后的汇编程序，可以被as汇编、链接
+        .S  未预处理的汇编程序，可以被as预处理、汇编、链接
+        .h  头文件，不进行任何操作
+        .o  编译后的目标文件，传送给ld
+        .a  目标文件库，传送给ld
+    034 gcc的应用实例
+        建立三个文件c001_main.c c001_sum.c c001_sum.h
+        编译 gcc c001_main.c c001_sum.c -o c001
+        github: https://github.com/zxwtry/store/tree/master/c/201606
+    035 Linux C语言的调试工具 gdb
+        file    装入想要调试的可执行文件
+        kill    终止正在调试的程序
+        list    列出产生执行文件的部分源代码
+        next    执行一行源代码但不进入函数内部
+        step    执行一行源代码而且进入函数内部
+        run     执行当前被调试的程序
+        quit    退出gdb
+        watch   动态坚实一个变量的值
+        make    不退出gdb而重新产生可执行文件
+        call name(args) 调用并执行名为name、参数为args的函数
+        return value    停止执行当前函数，并将value返回给调用者
+        break   在代码里设置断点，使程序执行到此处被挂起
+        
 
+            
 
             
 
