@@ -312,4 +312,4 @@
     031 vim配置
         a,  进入vim  -->  :echo $VIM
             查看vim配置文件所在位置 
-        b,      
+        b,   
