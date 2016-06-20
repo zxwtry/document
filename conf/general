@@ -86,7 +86,19 @@ Linux 输出内容到文件
 
 Linux 使用 apt-get install openjdk-7-jdk 自动安装的java
 	那么java　的安装目录是：　 /usr/lib/jvm/java-7-openjdk-amd64/
-
+Linux 自行安装jdk
+    vim /etc/profile
+        export JAVA_HOME=/home/software/jdk8
+        export JRE_HOME=/home/software/jdk8
+        export CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar
+        export PATH=$JAVA_HOME/bin:$JRE_HOME/bin:$PATH
+    选择默认的JAVA
+        sudo update-alternatives --install /usr/bin/java java /home/software/jdk8/bin/java 300
+        sudo update-alternatives --install /usr/bin/javac javac /home/software/jdk8/bin/javac 300
+    更新设定
+        sudo update-alternatives --config java
+    更新系统配置文件
+        source /etc/profile
 Linux  tar　的使用
 	1，	tar 打包　　　tar -cvf A.tar *
 		tar 解包　　　tar -xvf A.tar 
