@@ -1,19 +1,17 @@
-i各种配置
+各种配置
 配置001：mysql 声音
 1. 禁用“嘀嘀”声的设备来源，这是由beep驱动服务所提供，可以将beep驱动的启动类型设置为禁用，可以打开CMD窗口，运行以下命令：
 sc config beep start= disabled
 2. 停止beep驱动，可以运行以下命令：
 sc stop beep
 
-
-virtualbox
+配置002：virtualbox
 	使用 ifconfig 能够查看ip , netmask , Bcast 等信息
 	如果需要查看DNS-nameserver等信息
 	使用 cat /etc/resolv.conf
 	查看网关信息： netstat -rn
 
-
-设置固定ip，
+配置003：设置固定ip，
 修改 /etc/network/interfaces
 	将auto eth0下面的东西修改成为：
 		iface eth0 inet static
@@ -21,53 +19,53 @@ virtualbox
 		netmask [参看修改之前的]
 		gateway
 
-Linux允许root远程ssh登陆
+配置004：Linux允许root远程ssh登陆
 	vim /etc/ssh/sshd_config
 		将PermitRootLogin without-password 修改为 PermitRootLogin yes
 	重启ssh服务
 		service ssh restart
 
-Chrome插件，不是从Chrome市场上面下的不让用的解决方法：
+配置005：Chrome插件，不是从Chrome市场上面下的不让用的解决方法：
 	URL ：http://www.tuicool.com/articles/fArIvq
 	win+r 输入gpedit.msc
 	添加chrome.adm（在email里有）
 	计算机配置 --> 管理模板 --> 经典管理模板(ADM) --> Google --> GoogleChrome --> 扩展程序 --> 配置扩展程序白名单 --> 将扩展程序的ID复制进去 -- > 重启Chrome
 
-Linux命令
+配置006：Linux命令
 	du  -h  --max-depth=1  /root
 	查看 /root目录下面 遍历深度是1 的所有文件夹/文件的大小
 
-Linux 文件
+配置007：Linux 文件
 	ubuntu　通过 apt-get install 下载的安装包在
 	/var/cache/apt/archives/　　文件夹里面
 
-Linux 文件
+配置008：Linux 文件
 	find /root  -maxdepth 1 -name "@*"
 	意思是：1 == 在/root目录下查找　以@开头的文件或目录
 
-Vim 
+配置009：Vim 
 	:.s/form/to/g
 	:10,20s/from/to/g
 	:1,.s/from/to/g	从第一行到当前行的内容进行替换
 	:.,$s/from/to/g	从当前行到最后一行的内容进行替换
 
-Linux 修改计算机名字
+配置010：Linux 修改计算机名字
 	vim /etc/hostname
 	vim /etc/hosts
 	
 
-Linux 忽略 konw_hosts　登陆
+配置011：Linux 忽略 konw_hosts　登陆
 	/etc/ssh/ssh_config 将StrictHostKeyChecking ask 设置为 no
 	再重启 ssh 服务 
 
-Linux　直接 SSH 无密码登陆
+配置012：Linux　直接 SSH 无密码登陆
 	1，	生成 id_rsa.pub ：
 		ssh-keygen，一路回车
 	2，	添加 id_rsa.pub 到　
 		cat id_master.pub |tee -a authorized_keys
 		cat id_master.pub >> authorized_keys
 
-Linux 输出内容到文件
+配置013：Linux 输出内容到文件
 	１，输出内容到单个文件
 		echo "Hello World" >> a.txt
 		echo "Hello World" |tee a.txt
@@ -84,7 +82,7 @@ Linux 输出内容到文件
 		以追加的方式：
 			cat a.txt |tee -a b.txt c.txt
 
-Linux 使用 apt-get install openjdk-7-jdk 自动安装的java
+配置014：Linux 使用 apt-get install openjdk-7-jdk 自动安装的java
 	那么java　的安装目录是：　 /usr/lib/jvm/java-7-openjdk-amd64/
 Linux 自行安装jdk
     vim /etc/profile
@@ -99,7 +97,7 @@ Linux 自行安装jdk
         sudo update-alternatives --config java
     更新系统配置文件
         source /etc/profile
-Linux  tar　的使用
+配置015：Linux  tar　的使用
 	1，	tar 打包　　　tar -cvf A.tar *
 		tar 解包　　　tar -xvf A.tar 
 		tar 增加		 tar -rvf A.tar new.txt
@@ -137,10 +135,10 @@ Linux  tar　的使用
 		gzip usr.tar
 		% 压缩 tar备份文件usr.tar，此时压缩文件的扩展名为.tar.gz。
 
-Linux  对于 U 盘，　Desktop　可能会自动挂载，　在 /media/zxwtry/　目录下
+配置016：Linux  对于 U 盘，　Desktop　可能会自动挂载，　在 /media/zxwtry/　目录下
 	Linux 挂载的方法：
 
-Linux vim 空格配置
+配置017：Linux vim 空格配置
 	设置成为tab 四个空格:
 		set ts=4
 		set expandtab
@@ -155,7 +153,7 @@ Linux vim 空格配置
 			:%retab!
 		注：加!是用于处理非空白字符之后的tab，即所有的tab；如果不家!，则只处理行首的tab
 
-Hadoop  add datanode
+配置018：Hadoop  add datanode
 	先做好配置准备 : hosts ssh etc/.haoop/slaves ...
 	sbin/hadoop-daemon.sh start datanode
 	sbin/yarn-daemon.sh start nodemanager
@@ -163,15 +161,15 @@ Hadoop  add datanode
 	bin/hdfs dfsadmin -setBalancerBandwidth 67108864
 	16777216
 
-Linux
+配置019：Linux
 	echo $?
 	关闭自动启动：		chkconfig NetworkManager off
 	
-Ubuntu 安装numpy和sklearn
+配置020：Ubuntu 安装numpy和sklearn
 	apt-get install python-pip
 	pip install -U scikit-learn
 
-Ubuntu 缩短终端路径名
+配置021：Ubuntu 缩短终端路径名
 	ubuntu总是显示全路径名，路径比较长的时候，会非常不方便。centos就是使用简化路径名。ubuntu需要做的修改如下：
 	vim ~/.bashrc
 	找到内容：
@@ -181,7 +179,7 @@ Ubuntu 缩短终端路径名
         PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
 	需要的操作是将w更改成W就行了。退出终端，从新进入就好了。
 
-Linux 挂载ntfs的方法
+配置022：Linux 挂载ntfs的方法
     1,  安装ntfs-3g
     2,  mount -t ntfs-3g /dev/sda2 /ntfs
     3,  使用fdisk -l查看磁盘挂载点
@@ -189,4 +187,9 @@ Linux 挂载ntfs的方法
         vi /etc/fstab　文件结尾添加需要挂载的ntfs盘
         添加的命令是：  /dev/sda2 /ntfs ntfs-3g default 0 0	
 
+配置023：Linux ssh到另外一台电脑的时候第一次需要输入yes，非常不方便
+    vim /etc/ssh/ssh_config
+    StrictHostKeyChecking no
 
+配置024：更换源为aliyun，参照如下进行配置
+     http://mirrors.aliyun.com/ubuntu/

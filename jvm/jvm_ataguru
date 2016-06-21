@@ -1,0 +1,14 @@
+note001:
+    JVM是一台虚拟机，使用软件模拟Java字节码的指令集。除了PC寄存器，没有复杂寄存器。
+    JVM:    JRockit和Hotspot
+    在Hotspot基础上，移植JRockit优秀特性
+note002:    JVM规范
+    --- Class文件类型
+    --- 运行时数据
+    --- 帧栈
+    --- 虚拟机的启动
+    --- 虚拟机的指令集
+note003:    Java
+
+
+
