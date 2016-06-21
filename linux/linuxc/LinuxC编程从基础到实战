@@ -487,7 +487,36 @@
         c,  相关操作命令:   make项目管理器使用依赖文件来创建目标体
             所需要的命令(command)，这些命令必须以制表符(Tab)开头
         一个标准的makefile文件如下:
-            
+            两个makefile文件分别命名为hello.c和hello.h的文件经过编译
+            生成目标体hello.o，执行的命令为gcc编译指令: gcc -c hello.c
+            实际的应用代码如下:
+                #The simplest example
+                hello.o:hello.c hello.h
+                gcc -c hello.c -o hell.o
+            此时可以使用make项目管理器了，其标准调用格式如下：
+                make target
+            运行时make项目管理器会自动读入makefile文件，找到相关的依赖
+            文件并执行对应target的command语句，可以看到以上makefile的
+            文件输出结果如下：
+                make hello.o
+            可以看到，make项目管理器执行了"hello.o"对应的命令语句，并
+            生成了"hello.o"目标体
+    039 make的变量(一个较为复杂的makefile)
+        在这个makefile中有3个目标体(target)，分别为exam1、exam2.o、
+        exam3.o，其中第一个目标体的依赖文件就是后两个目标体，如果用户
+        使用命令"make exam1"，则make管理器找到exam1目标体开始执行。
+        实际的应用代码如下：
+            exam1:exam2.o exam3.o
+                gcc exam2.o bar.o -o myprog
+            exam2.o:exam.c exam2.h head.h
+                gcc -Wall -O -g -c exam2.c -o exam2.o
+            exam3.o:bar.c head.h
+                gcc -Wall -O -g -c yul.c -o exam3.o
+        在执行以上makefile文件时，make项目管理器会自动检查相关文件的
+        时间戳，首先先检查"exam2.o"、"exam3.o"和"exam1"3个文件的时间戳
+        之前，它会向下查找那些把"exam2.o"或"exam3.o"作为目标文件的
+        时间戳。例如，"exam2.o"的依赖文件为"exam2.c"、"exam2.h"、"head.h"。
+        
         
     
             
