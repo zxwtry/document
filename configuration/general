@@ -193,3 +193,6 @@ Linux 自行安装jdk
 
 配置024：更换源为aliyun，参照如下进行配置
      http://mirrors.aliyun.com/ubuntu/
+
+配置025: 腾讯云将网址和IP进行绑定
+    云解析 --> 添加www --> 选择自己的服务器 --> traceroute www.zxwtry.com
