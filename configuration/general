@@ -221,5 +221,5 @@ Linux 自行安装jdk
             connectionTimeout="20000"
             URIEncoding="UTF-8"
             redirectPort="443" />
-    f,  sudo service tomcat restart
+    f,  sudo service tomcat7 restart
 
