@@ -538,9 +538,43 @@
             所以，需要给中间目标文件打个包，在Windows下这种包叫
             "库文件"(Library File)，即.lib文件，在UNIX下，是Archive 
             File，也就是.a文件。
-        e,   
-            
+        e,  make命令执行时，需要一个makefile文件，告诉make命令如何去
+            编译和链接程序。一个示例程序，工程里面有8个c文件和3个
+            头文件，需要写一个makefile来告诉make命令如何编译和链接
+            这几个文件。规则是：
+            1) 如果这个工程没有编译过，所有的c文件都要编译并被链接
+            2) 如果这个文件的某几个c文件被修改，只编译被修改的c文件
+            　 ，并链接目标程序。
+            3) 如果这个工程的头文件被改变了，那么我们需要编译引用这
+                几个头文件的c文件，并链接目标程序。
+        f,  make的规则
+            target ... : prerequistites ...
+                command
+                ...
+                ...
+            target可以是一个object file(目标文件)，也可以是一个执行
+            文件，还可以是一个标签(label)。
+            prerequistes就是，要生成那个target所需要的文件或是目标。
+            command也就是make需要执行的命令。(任意shell命令)
+            就是文件的依赖关系，target这一个或多个的目标文件依赖于
+            prerequistes中的文件，其生成规则定义在command中。
+            prerequistes中如果有一个以上的文件比target文件要新的话，
+            command所定义的命令就会被执行。这就是makefile的规则，
+            也是makefile中最核心的内容。
+        g,  一个makefile的示例
+            如果一个工程中有3个头文件和8个c文件，makefile文件如下：
+                edit : main.o kbd.o command.o display.o \
+                        insert.o search.o files.o utils.o
+                        //如果后面.o问你教案比edit新，才会执行下面
+                      cc -o edit main.o kbd.o command.o display.o\
+                        insert.o search.o files.o utils.o
+                main.o : main.c def.h
+                    cc -c main.c
+                kbd.o : kbd.c defs.h command.h
+                    
 
+                        
+                        
         
     
             

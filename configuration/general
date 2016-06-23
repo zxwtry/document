@@ -166,6 +166,8 @@ Linux 自行安装jdk
 	关闭自动启动：		chkconfig NetworkManager off
 	
 配置020：Ubuntu 安装numpy和sklearn
+    apt-get install python-numpy
+    apt-get install python-scipy
 	apt-get install python-pip
 	pip install -U scikit-learn
 
@@ -196,3 +198,28 @@ Linux 自行安装jdk
 
 配置025: 腾讯云将网址和IP进行绑定
     云解析 --> 添加www --> 选择自己的服务器 --> traceroute www.zxwtry.com
+
+配置026: ubuntu关闭防火墙
+    ufw disable     //一般这条命令就可以了
+    apt-get remove iptables     //卸载iptables   
+
+配置027: 修改tomcat端口为80
+    a,  sudo apt-get install authbind //允许非root账户绑定1024以下端口
+                                      //root账户自动忽略
+    b,  sudo apt-get install tomcat7  //不说，都懂
+    c,  vim /etc/default/tomcat7  修改AUTHBIND=yes
+    d,  touch /etc/authbind/byport/80
+        touch /etc/authbind/byport/443
+        chmod 0755 /etc/authbind/byport/80
+        chmod 0755 /etc/authbind/byport/443
+        chown tomcat7:tomcat7 /etc/authbind/byport/80
+        chown tomcat7:tomcat7 /etc/authbind/byport/443
+        //作用就是添加自动绑定
+        //80是必须的，443随意
+    e,  vim /var/lib/tomcat7/conf/conf/server.xml
+        <Connector port="80" protocol="HTTP/1.1"
+            connectionTimeout="20000"
+            URIEncoding="UTF-8"
+            redirectPort="443" />
+    f,  sudo service tomcat restart
+
