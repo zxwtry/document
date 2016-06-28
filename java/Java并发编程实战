@@ -1,0 +1,21 @@
+001 对异步事件的简单处理
+    1， 历史上，OS把一个进程所能够创建的县城限制在比较少的数量上。
+        因此，OS为多元化的I/O开发了一些高效的机制，比如Unix的select
+        和pull系统调用，为了访问这些机制，Java类库对非阻塞I/O提供一组
+        包(java.nio)。
+    2,  安全危险
+        a,  在没有进行充分同步的情况下，多线程的各个操作的顺序是不可
+            预测的。
+        b,  非线程安全的序列生成器
+            @notThreadSafe
+            public class UnsafeSequence {
+                private int value;
+                public int getNext() {
+                    return value ++;
+                }
+            }
+        c,  问题在于value ++; 是需要分成3个独立的操作
+            (1) 读取这个值
+            (2) 使之加1
+            (3) 写入新值
+        
