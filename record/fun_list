@@ -1,0 +1,62 @@
+#瞎看的东西
+001 R vs Py (全篇都在讲iPython)
+    ipython notebook
+        Pandas  数据加载分析 dataform
+        matplotlib  matlab制图
+        numpy   矩阵计算
+        graphviz    图形脚本
+        D3.js       网页图表
+    ipython 3.0
+        Jupter 并发Python
+    Julia
+    Ruby
+    Docker
+    github 和 Jupyter合作
+    在github上面可以直接运行Jupyter
+    在网上可运行
+    IP：值得折腾
+    Jupyter 必须关注
+    Pandas  很好玩
+002 如何攒一台深度学习服务器
+    1， 什么是深度学习
+        a,  一个又深又宽的人工神经网络
+        b,  相对优势：可以自动从数据中学习复杂的特征
+        c,  繁荣原因：大数据，硬件，算法
+    2,  深度学习的适用场景
+        a,  海量数据，普通机器学习算法效果不佳
+        b,  需要处理图像、语音、文本等复杂非结构化数据，具有层次结构
+            的特征，难以进行特征提取。
+    3,  深度学习不适用的场景
+        a,  数据比较脏乱，没有时间清理
+        b,  数据量比较小
+        c,  首要的建模目标是理解数据，而非预测
+    4,  软件环境
+        a,  Ubuntu 14.04
+        b,  CUDA 7.5
+        c,  Torch7
+            Caffe
+            Deeplearning4j
+            Theano
+            Mxnet
+            TensorFlow
+    5,  Theano
+        a,  高校的数值计算库
+        b,  与Numpy紧密结合
+        c,  优化了速度和稳定性
+        d,  支持GPU做高负荷运算
+        e,  自动计算函数导数，适合深度学习
+            Keras
+            Lasagne
+            Opendeep
+            Blocks
+    6,  Deep learning Reading List
+        jmozah.github.io/links/
+    7,  简单案例：短文本分类
+        问题：如何对短文本进行分类
+        数据：某电商网站上的数万条差评，已做人工标注
+        方法：贝叶斯分类，词向量平均，卷积神经网络
+        工具：keras
+    8,  CNN应用于文本分类
+        CNN:    Convolutional Neural Networks
+        可以不分词
+    
