@@ -171,5 +171,146 @@
             (5) 返回前k个点出现频率最高的类别作为当前点的预测分类
         2,  Python程序
             def classify0(inX, dataSet, labels, k):
-                dataSetSize = dataSet.shape(
+                dataSetSize = dataSet.shape[0]
+                diffMat = tile(inX, (dataSetSize,1)) - dataSet
+                sqDiffMat = diffMat**2
+                sqDistances = sqDiffMat.sum(axis=1)
+                distances = sqDistances**0.5
+                sortedDistIndicies = distances.argsort()     
+                classCount={}          
+                for i in range(k):
+                    voteIlabel = labels[sortedDistIndicies[i]]
+                    classCount[voteIlabel] = classCount.get(voteIlabel,0) + 1
+                sortedClassCount = sorted(classCount.iteritems(), key=operator.itemgetter(1), reverse=True)
+                return sortedClassCount[0][0]
+            
+            def createDataSet():
+                group = array([[1.0,1.1],[1.0,1.0],[0,0],[0,0.1]])
+                labels = ['A','A','B','B']
+                return group, labels
+            
+            def file2matrix(filename):
+                fr = open(filename)
+                numberOfLines = len(fr.readlines())         #get the number of lines in the file
+                returnMat = zeros((numberOfLines,3))        #prepare matrix to return
+                classLabelVector = []                       #prepare labels return   
+                fr = open(filename)
+                index = 0
+                for line in fr.readlines():
+                    line = line.strip()
+                    listFromLine = line.split('\t')
+                    returnMat[index,:] = listFromLine[0:3]
+                    classLabelVector.append(int(listFromLine[-1]))
+                    index += 1
+                return returnMat,classLabelVector
+                
+            def autoNorm(dataSet):
+                minVals = dataSet.min(0)
+                maxVals = dataSet.max(0)
+                ranges = maxVals - minVals
+                normDataSet = zeros(shape(dataSet))
+                m = dataSet.shape[0]
+                normDataSet = dataSet - tile(minVals, (m,1))
+                normDataSet = normDataSet/tile(ranges, (m,1))   #element wise divide
+                return normDataSet, ranges, minVals
+               
+            def datingClassTest():
+                hoRatio = 0.50      #hold out 10%
+                datingDataMat,datingLabels = file2matrix('datingTestSet2.txt')       #load data setfrom file
+                normMat, ranges, minVals = autoNorm(datingDataMat)
+                m = normMat.shape[0]
+                numTestVecs = int(m*hoRatio)
+                errorCount = 0.0
+                for i in range(numTestVecs):
+                    classifierResult = classify0(normMat[i,:],normMat[numTestVecs:m,:],datingLabels[numTestVecs:m],3)
+                    print "the classifier came back with: %d, the real answer is: %d" % (classifierResult, datingLabels[i])
+                    if (classifierResult != datingLabels[i]): errorCount += 1.0
+                print "the total error rate is: %f" % (errorCount/float(numTestVecs))
+                print errorCount
+                
+            def img2vector(filename):
+                returnVect = zeros((1,1024))
+                fr = open(filename)
+                for i in range(32):
+                    lineStr = fr.readline()
+                    for j in range(32):
+                        returnVect[0,32*i+j] = int(lineStr[j])
+                return returnVect
+            
+            def handwritingClassTest():
+                hwLabels = []
+                trainingFileList = listdir('trainingDigits')           #load the training set
+                m = len(trainingFileList)
+                trainingMat = zeros((m,1024))
+                for i in range(m):
+                    fileNameStr = trainingFileList[i]
+                    fileStr = fileNameStr.split('.')[0]     #take off .txt
+                    classNumStr = int(fileStr.split('_')[0])
+                    hwLabels.append(classNumStr)
+                    trainingMat[i,:] = img2vector('trainingDigits/%s' % fileNameStr)
+                testFileList = listdir('testDigits')        #iterate through the test set
+                errorCount = 0.0
+                mTest = len(testFileList)
+                for i in range(mTest):
+                    fileNameStr = testFileList[i]
+                    fileStr = fileNameStr.split('.')[0]     #take off .txt
+                    classNumStr = int(fileStr.split('_')[0])
+                    vectorUnderTest = img2vector('testDigits/%s' % fileNameStr)
+                    classifierResult = classify0(vectorUnderTest, trainingMat, hwLabels, 3)
+                    print "the classifier came back with: %d, the real answer is: %d" % (classifierResult, classNumStr)
+                    if (classifierResult != classNumStr): errorCount += 1.0
+                print "\nthe total number of errors is: %d" % errorCount
+                print "\nthe total error rate is: %f" % (errorCount/float(mTest))
+                            
+        3， classify0()函数有4个输入参数：用于分类的输入向量inX，输
+            入的训练样本集为dataSet，标签向量为labels，最后的参数k表
+            示选择最近邻居的数目，其中标签向量的元素数目和矩阵dataSet
+            的行数相同。如果数据集存在4个特征值，则(1,0,0,1)与(7,6,9,
+            4)之间的距离计算为sqrt((7-1)*(7-1)+(6-0)*(6-0)+(9-0)*(9-0
+            )+(4-1)*(4-1))。计算完所有点之间的距离后，可以对数据从小
+            到大的次序排序。然后，确定前k个距离最小元素所在的主要分类
+            。最后将classCount字典分解为元祖列表，然后使用程序第二行
+            导入运算模块的itemgetter方法，按照第二个元素的次序对元祖进
+            行排序。此处的排序为逆序，即按照从最大到最小次序排序，最后
+            返回发生频率最高的元素标签。
+            为了预测数据所在分类，在Python提示符中输入下列命令：
+            >>> kNN.classify0([0,0], group, labels, 3)
+            输出结果应该是B,可以改变输入[0,0]为其他值，测试程序的运行
+            结果。到目前为止，我们已经构造第一个分类器，使用这个分类器
+            可以完成很多分类任务。
+    7,  如何测试分类器
+        分类器的错误率：出错次数/总次数。错误率是常用的评估方法，主要
+        用于评估分类器在某个数据集上的执行效果。完美分类器的错误率为0
+        ，最差分类器的错误率是1.0。
+    8,  准备数据：从文本文件中解析数据
+        收集了非常多的约会数据，数据存放在datingTestSet.txt中，每个样
+        本数据占据一行，总共1000行。样本主要包含以下3个特征：
+            a,  每年获得的飞行常客里程数
+            b,  看视频玩游戏所消耗时间百分比
+            c,  每周消费的冰淇淋公升数
+        Python处理文本文件的步骤
+            a,  打开文件，得到文件的行数
+            b,  创建以零填充的矩阵NumPy
+            c,  循环处理文件中的每行数据，首先使用函数line.strip()截
+                取掉所有的回车字符，然后使用tab字符\t将上一步得到的整
+                行数据分割成一个元素列表。
+            d,  选取前3个元素，将它们存储到特征矩阵中。Python可以使用
+                索引值-1表示列表中的最后一列元素。可以非常方便讲列表的
+                最后一列存储到classLabelVector中。
+            >>> reload(kNN)
+            >>> datingDataMat, datingLabelas = kNN.file2matrix("dating
+                TestSet.txt")
+    9,  分析数据：使用Matplotlib创建散点图
+        a,  使用Matplotlib制作原始数据的散点图
+            >>> import matplotlib
+            >>> import matplotlib.pyplot as plt
+            >>> fig = plt.figure()
+            >>> ax = fig.add_subplot(111)
+            >>> ax.scatter(datingDataMat[:,1],datingDataMat[:,2])
+            >>> plt.show()
+        b,  由于没有使用样本分类的特征值，很难看到有用的数据模式信息
+            。一般使用色彩或者其他标记号标记不同分类。Matplotlib库提供
+            的scatter函数支持个性化。
+            >>> ax.scatter(datingDataMat[:,1],datingDataMat[:,2], 15.0
+                *array(datingLabels), 15.0*array(datingLabels))
             
