@@ -172,4 +172,4 @@
         2,  Python程序
             def classify0(inX, dataSet, labels, k):
                 dataSetSize = dataSet.shape(
-         
+            
