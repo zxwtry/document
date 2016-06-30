@@ -1,0 +1,43 @@
+算法01  Bloom Filter : 布隆过滤器
+    1,  基本思想
+        通过一个Hash函数将一个元素映射成一个位阵列(Bit Array)中的一个
+        点。只需要看看这个点是不是1就能够判断集合中有没有对应元素。
+    2,  解决Hash冲突
+        如果位阵列长度是m个点，如果想要将冲突率降低到1%，Hash表只能包
+        含m/100个元素。显然这种做法空间浪费很大。解决的办法就是使用多
+        个Hash表，只要其中一个集合说不在，那么就是不在。
+    3,  缺点
+        a,  误算率(False Positive)便是其中之一。随着存入的数量增加，误
+        算率也随着增加。
+        b,  Bloom Filter无法从Bloom Filter集合中删除一个元素。
+    4,  一直输入元素的个数，如何确定位数组m的大小及hash函数个数。当
+        Hash函数的个数k=(ln2)*(m/n)时候错误率最小。在错误率不大于E的
+        情况下，m至少要等于n*lg(1/E)才能表达任意n个元素的集合.但m应该
+        更大些，因为包保证bit数组里面至少一半为0，则m应该>=nlg(1/E)*
+        lge，大概就是1.44倍的n*lg(1/E) (其中，这里lg表示2为底)
+    5,  一般Bloom Filter常与key-value的数据库一起使用，加快查询。所以
+        Bloom Filter所占的空间非常小，可以常驻内存。
+    6,  Bloom Filter的应用一：key-value加快查询
+        就是在storage之前添加一个filter。具体见imgs/000001.png
+    7,  Bloom Filter的应用二：URL查重
+        *已经在Big Table上面实际使用，减少IO压力
+    8,  Bloom Filter的应用三：Proxy-Cache
+        在Internet Cache Protocol中的Proxy-Cache很多都是使用Bloom Filter
+        存储URLs，除了高效查询外，很方便传输交换Cache信息。
+    9,  Bloom Filter的应用四：网络应用
+        a,  P2P网络中查找资源的操作，可以对每条网络通路保存Bloom Filter
+            ，当命中时，则选择该通路访问。
+        b,  广播消息时，可以检测某个IP是否已经发包
+        c,  检测广播消息包的环路，将Bloom Filter保存在包中，每个节点将自
+            己添加到Bloom Filter
+        d,  消息队列管理，使用Counter Bloom Filter 管理消息流量
+    10, Bloom Filter的应用五：垃圾邮件地址过滤
+        a,  一个小计算，需要存储一亿个email地址，需要多大的内存。
+            step1,  email的指纹码几位？
+                    8字节。因为4字节不够。
+            step2,  哈希表的效率定多少？
+                    50%
+            step3,  计算得到10E8个16B就是约1.6GB
+        b,  Bloom Filter大概只需要1/8-1/4的内存占用，就能够解决问题。
+            Bloom Filter不会漏掉任何一个黑名单上的垃圾邮件地址，但是
+            很可能会误判，补救的方法是建立以个白名单。
