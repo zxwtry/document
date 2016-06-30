@@ -313,4 +313,19 @@
             的scatter函数支持个性化。
             >>> ax.scatter(datingDataMat[:,1],datingDataMat[:,2], 15.0
                 *array(datingLabels), 15.0*array(datingLabels))
-            
+    10, 准备数据：归一化数值
+        不同数据，单位不同，必须要进行归一化，才能保证起同等效应。
+        newvalue = (oldValue - min)/(max - min)
+        在kNN.py中增加一个新的函数autoNorm()，完成归一化
+        def autoNorm(dataSet):
+            minVals = dataSet.min(0)
+            maxVals = dataSet.max(0)
+            ranges = maxVals - minVals
+            normDataSet = zeros(shape(dataSet))
+            m = dataSet.shap[0]
+            normDataSet = dataSet - tile(minVals, (m, 1))
+            normDataSet = normDataSet/tile(ranges, (m, 1))
+            return normDataSet, ranges, minVals
+        在函数autoNorm()中，将每列的最小值放在变量minVals中，将最大值
+        放在变量maxVals中，其中dataSet.min(0)中的参数0使得函数可以从
+        列中选取最小值，而不是选取当前行的最小值。

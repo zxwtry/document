@@ -571,19 +571,99 @@
                 main.o : main.c def.h
                     cc -c main.c
                 kbd.o : kbd.c defs.h command.h
-                    
-
-                        
-                        
         
-    
-            
-
-                
-                 
-        
-
-            
-
-            
-
+    041 回到书本，现在在P65
+        1,  makefile 中有变量
+        2,  变量代替目标提、依赖文件、命令和makefile文件中的其他部分
+        3,  变量定义两种方式：递归展开方式和简单扩展方式
+        4,  递归展开方式：变量包含对其他变量的引用，在引用该变量的时候
+            ，一次性将全部内嵌变量展开。有严重缺点(CFLAGS=$(CFLAGS) -O
+            )可能会导致无限循环。
+        5,  简单扩展方式变量的值在定义处展开，并且只展开一次，不包含任何对
+            其他变量的引用，从而消除变量的嵌套引用。
+        6,  makefile的变量名不包含":"、"#"、"="以及空格结尾的任何字符
+            串。
+        7,  递归展开方式的定义格式为：VAR=var
+            简单扩展方式的定义格式为：VAR=var
+            mkae中的变量格式：$(VAR)
+        8,  使用变量的makefile文件
+            OBJS = exam2.o exam3.o
+            CC = gcc
+            CFLAGS = -Wall -O -g
+            exam1:$(OBJS)
+                $(CC) $(OBJS) -o exam1
+            exam2.o:exam2.c exam2.h
+                $(CC) S(CFLAGS) -c exam2.c -o exam2.o
+            exam3.o:yul.c yul.h
+                $(CC) $(CFLAGS) -c yul.c -o exam3.o
+        9,  makefile中的变量：用户自定义变量、预定义变量、自动变量和
+            环境变量。
+        10, 预定义变量，常见如下
+            AR  库文件维护程序的名称    默认ar
+            AS  汇编程序的名称          默认as
+            CC  C编译器的名称           默认cc
+            CPP C预编译器的名称         默认"$(CC) -E"
+            CXX C++编译器的名称         默认g++
+            FC  Fortran编译器的名称     默认f77
+            RM                          默认rm -rf
+            ARFLAGS 库文件维护程序的选项    无默认值
+            ASFLAGS 汇编程序的选项          无默认值
+            CFLAGS  C编译器的选项           无默认值
+            CPPFLAGS    C预编译器的选项     无默认值
+            CXXFLAGS
+            FFLAGS
+            在上面程序中，cc没有采用默认值，故"cc=gcc"单列
+        11, makefile常见的自动变量
+            $*  不包含扩展名的目标文件名称
+            $+  所有的依赖文件，空格分开，出现的先后为序，可能有重
+            $<  第一个依赖文件的名称
+            $?  所有时间戳比目标文件晚的依赖文件，并以空格分开
+            $@  目标文件的完整名称
+            $^  所有不重复的依赖文件，空格分开
+            $%  如果目标是归档成员，则该变量表示目标的归档成员名称
+        12, 使用自动变量的makefile文件
+            OBJS = exam2.o exam3.o
+            CC = gcc
+            CFLAGS = -Wall -O -g
+            exam1:$(OBJS)
+                $(CC)$% -o $@
+            exam2.o:exam2.c exam2.h
+                $(CC)$(CFLAGS) -c $< -o $@
+            exam3:yul.c yul.h
+                $(CC)$(CFLAGS) -c $< -o $@
+        13, 同名，自定义变量会覆盖环境变量
+        14, makefile规则：目标体、依赖文件及其之间关系
+            上面例子都显式指明makefile的规则关系，如下面语句
+            "$(CC)$(CFLAGS)-c $< -o $@"，为了简化makefile的编写，make
+            工程管理还定义了隐式规则和模式规则。
+        15, 隐式规则
+            a, 常见的隐式规则目录
+            C编译：".c"变成".o"     $(CC) -c $(CPPFLAGS) $(CFLAGS)
+            C++编译："cc"或".C"变成".o" 
+                                    $(CXX) -c $(CPPFLAGS) $(CXXFLAGS)
+            Pascal编译：".p"变成".o"$(PC) -c $(PFLAGS)
+            Fortran编译：".r"变成"-o" $(FC) -c $(FFLAGS)
+            b,  示例
+            OBJS= exam2.o exam3.o
+            CC = gcc
+            CFLAGS = -Wall -O -g
+            exam1:$(OBJS)
+                $(CC) $^ -o $@
+        16, 模式规则：相同处理规则，处理多个文件
+            相关文件前必须用"%"标明。
+            OBJS = exam2.o exam3.o
+            CC = gcc
+            CFLAGS = -Wall -O -g
+            exam1:$(OBJS)
+                $(CC)$^ -o $@
+            %.o:%.c
+                $(CC)$(CFLAGS) -c $< -o $@
+        17，隐式规则仅能利用make默认的变量来进行操作。
+            模式规则能够引入用户的自定义变量
+    042 autotools的使用
+        1,  对于简单的项目，可以自行编写makefile文件
+            对于较大的项目，可以使用autotools来自动生成makefile
+        2,  $sudo apt-get install autoconf
+        3,  生成makefile的过程：
+            a,  aclocal:    生成aclocal.m4，处理本地宏定义
+            b,  autoscan:   给定目录(或当前目录)
