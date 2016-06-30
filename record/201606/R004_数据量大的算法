@@ -41,3 +41,22 @@
         b,  Bloom Filter大概只需要1/8-1/4的内存占用，就能够解决问题。
             Bloom Filter不会漏掉任何一个黑名单上的垃圾邮件地址，但是
             很可能会误判，补救的方法是建立以个白名单。
+    11, 一个Bloom Filter的参数
+        a,  基本参数：
+            m   bit数组的宽度(bit数)
+            n   加入其中的key的数量
+            k   使用的Hash函数的个数
+            f   False Positive的比率
+        b,  Bloom Filter满足的公式
+            {1-[1-1/m]^kn}^k = {1-e^[-kn/m]}^k 
+        c,  给定m和n时，能够使t最小化的k值为：
+            (m/n)*ln2=(9m)/(13n)=0.7m/n
+            此时给出的f为：
+            (1/2)^k=0.62^(m/n)
+        d,  对于任意给定的f，有
+            n = m * ln(0.62)/ln(f)      (1)
+        e,  需要k个Hash来达成目标
+            k = - ln(f) / ln(2)         (2)
+        f,  实际的f
+            f = {1 - e^[-kn/m]}^k       (3)
+        g,  (1)(2)(3)是Bloom Filter中常用的三个公式。
