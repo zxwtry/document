@@ -1,0 +1,17 @@
+配置001:
+    添加servlet，需要导包。包在${tomcat7}/lib/servlet-api.jar。添加到
+    工程中就行。
+配置002:
+    添加Java代码的时候，如果是直接添加servlet的话，不需要再web.xml中
+    添加过滤器。如果先添加普通Java代码，那么需要添加到web.xml中的信息
+    如下：
+    <servlet>
+        <description></description>
+        <display-name>Login</display-name>
+        <servlet-name>Login</servlet-name>
+        <servlet-class>permission.Login</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Login</servlet-name>
+        <url-pattern>/Login</url-pattern>
+    </servlet-mapping>

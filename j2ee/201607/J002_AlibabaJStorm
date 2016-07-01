@@ -1,0 +1,193 @@
+001:    简介
+        JStorm是一个分布式实时计算引擎；类似Hadoop MapReduce，用户按
+        照指定的接口实现一个任务。任务7*24小时运行，动态无故障。
+002:    不同角度
+        1,  应用角度：分布式应用
+        2,  系统角度，类似MapReduce的调度系统
+        3,  数据角度：基于流水线的消息处理机制
+003:    Storm组件和Hadoop组件对比
+                    Storm           Hadoop
+        角色        Nimbus          JobTracker
+                    Supervisor      TaskTracker
+                    Worker          Child
+        应用名称    Topology        Job
+        编程接口    Spout/Blot      Mapper/Reducer
+004:    优点
+        1,  开发非常迅速：接口简单，只要遵守Topology、Spout和Bolt的编
+            程规范即可开发一个扩展性极好的应用，底层RPC、Worker之间冗
+            余，数据分流之类的动作完全不用考虑。
+        2,  扩展性极好：当一级处理单元速度，直接配置一下并发数，即可
+            线性扩展性能。
+        3,  健壮强：当Worker失效或机器出现故障，自动分配新的Worker代
+            替失效Worker.
+        4,  数据准确性：采用Ack机制，保证数据不丢失。更高要求：采用事
+            务机制，保证数据准确。
+005:    应用场景
+        1,  JStorm处理数据的方式是基于消息的流水线处理，适合无状态计
+            算，即计算单元的依赖数据全部在接受的消息中可以找到，最好
+            一个数据流不依赖另外一个数据流。
+        2,  应用场景一：日志分析
+            从日志中分析出特定的数据，并将分析的结果存入外部存储器如
+            数据库。
+        3,  应用场景二：管道系统
+            将一个数据从一个系统传输到另外一个系统，比如讲数据库同步
+            到Hadoop
+        4,  应用场景三：消息转化器
+            将接受到的消息按照某种格式进行转化，存储到另外一个系统如
+            消息中间件
+        5,  应用场景四：统计分析器
+            从日志或消息中，提炼出某个字段，然后做count或sum计算，最
+            后将统计值存入到外部存储器。中间处理过程可能更加复杂。
+006：   JStorm和Hadoop MapReduce的不同
+        1,  一个JStorm任务(topology)，是7*24小时永远在运行，除非用户
+            主动kill。
+        2,  提交到Hadoop MapReduce的job，执行完成之后，进程就退出了。
+007:    JStorm的topology中，有两种组件：spout和bolt
+        spout:  代表输入的数据源
+                这个数据源可以是任意的，例如kafaka，DB，HBase，HDFS等
+                ，JStorm从这个数据源中不断地读取数据，然后发送到下游
+                的bolt中进行处理。
+        bolt:   代表处理逻辑
+                bolt收到消息之后，对消息做处理(即执行用户的业务逻辑)
+                ，处理完之后，既可以将处理后的消息继续发送到下游的
+                bolt，这样会形成一个处理流水线(pipeline，更精确的是个
+                有向图)；也可以直接结束。
+                通常，一个流水线的最后一个bolt，会做一些数据存储工作
+                ，比如讲事实计算出来的数据写入DB、HBase等，供前台业务
+                进行查询和展现
+008：   组件的接口
+        JStorm对spout组件定义了一个接口：nextTuple，获取下一条消息。
+        执行时，可以理解成JStorm框架会不停地调这个接口，以从数据源拉
+        取数据并往bolt发送数据。
+        同时，bolt组件定义了一个接口：execute，这个接口就是用户用来处
+        理业务逻辑的地方。
+        每一个topology，既可以有多个spout，代表同事从多个数据源接收消
+        息，也可以多个bolt，来执行不同的业务逻辑。
+009:    调度和执行
+        1,  对于一个topology，JStorm最终会调度成一个或多个worker
+        2,  每个worker即为一个真正的操作系统执行进程，分布到一个集群
+            的一台或者多台机器上并发执行。
+        3,  每个worker中，又可以有多个task，分别代表一个执行线程。每
+            个task就是上面提到的组件(component)的实现，要么是spout要
+            么是bolt。
+        4,  提交一个topology的时候，会指定的参数一：总worker数
+            举例：提交一个topology，指定worker数为3，那么最后可能会有
+            3个进程在执行。之所以是可能，是因为根据配置，JStorm很可能
+            会添加内部的组件，如_acker或者_topology_maser(这两个组件
+            都是特殊的bolt)，这样会导致最终执行的进程数大于用户指定的
+            进程数。默认情况下，如果设置的worker数小于10个，那么
+            _topology_master只是作为一个task存在，不独占worker；如果
+            用户设置的worker数量大于等于10个，那么_topology_master作
+            为一个task将独占一个worker
+        5,  提交一个topology的时候，会指定的参数二：
+            每个component的并行度
+            每个topology都可以包含多个spout和bolt，而每个spout和bolt
+            都可以单独制定一个并行度(parallelism)，代表同事有多少个线
+            程(task)来执行这个spout或bolt。
+            JStorm中，每个执行线程都有一个task id，它从1开始递增，每
+            一个component中的task id是连续的。
+            topology包含一个spout和一个bolt，spout的并行度为5，bolt的
+            并行度为10。最终会有15个进程来执行：5个spout执行线程，10
+            个bolt执行线程。
+            这时spout的task id可能是1-5，bolt的task id可能是6-15，之
+            所以是可能，是因为在JStorm在调度的时候，并不保证task id一
+            定是从spout开始，然后bolt的。但是同一个component中的task
+            id一定是连续的。
+        6,  提交一个topology的时候，会指定的参数三：
+            每个component之间的关系
+            即用户需要去指定一个特定的spout发出的数据应该由哪些bolt来
+            处理，或者说一个中间的bolt，它发出的数据应该被下游哪些
+            bolt处理。
+            还是以上面的topology为例，它们会分布在3个进程中。JStorm使
+            用了一种均匀的调度算法，因此在执行的时候，每个进程分别都
+            各有5个线程在执行。由于spout是5个线程，不能均匀地分配到3
+            个进程中，会出现一个进程只有1个spout线程的情况；同样地，
+            也会出现一个进程中有4个bolt线程的情况。
+            在一个topology的运行过程中，如果一个进程(worker)挂掉了，
+            JStorm检测到之后，会不断尝试重启这个进程，这就是7*24小时
+            不间断执行的概念。
+        7,  消息的通信
+            spout的消息会发送给特定的bolt，bolt也可以发送给其他的
+            bolt，这之间是如何通信的？
+            首先，从spout发消息的时候，JStorm会计算出消息要发送的目标
+            task id列表，然后if是本进程中，直接走进程内部通信(如直接
+            将这个消息放入本进程中目标task的执行队列中)；如果是跨进程
+            ，那么JStorm会netty来讲消息发送到目标task中。
+        8， 实时计算结果输出
+            JStorm是7*24小时运行的，外部系统如果需要查询某个特定时间
+            点的处理结果，并不会请求JStorm（当然，DRPC可以支持这种需
+            求，但是性能不太好）。一般来说，在JStorm的spout或bolt中，
+            都会有一个定时往外部存储写计算结果，这样数据可以按照业务
+            需求被实时或者近实时地存储起来，然后直接查询外部存储中的
+            计算结果。
+010:    先需要搭建Zookeeper集群：单机模式
+        1， 下载zookeeper二进制安装包
+            官网地址是https://zookeeper.apache.org/
+            下载最新版的tar.gz包就行了。
+            现在的最新版是zookeeper-3.5.1-alpha.tar.gz
+        2,  解压zookeeper安装包
+            tar -zxvf zookeeper.tar.gz
+        3,  设置环境变量
+            ZOOKEEPER_HOME=/home/software/zookeeper
+            export ZOOKEEPER_HOME
+            PATH添加$ZOOKEEPER_HOME/bin
+            CLASSPATH添加$ZOOKEEPER_HOME/lib
+        4,  配置
+            进入$ZOOKEEPER_HOME/conf
+            cp zoo_sample.cfg zoo.cfg
+        5,  启动zookeepr
+            查看zookeeper端口
+                netstat -at | grep 2181
+            查看端口信息
+                netstat -nat
+            启动服务
+                bin/./zkServer.sh start
+            关闭服务
+                bin/./zkServer.sh stop
+            查看java进程
+                jps
+011:    先需要搭建zookeeper集群：伪集群模式
+        1,  其实在企业中不会存在，就是在单机下模拟集群的zookeeper服务
+            ，在一台机器上面有多个zookeeper的JVM同时运行
+        2,  确认集群为服务器的数量
+            2*n+1
+        3,  编写配置文件
+            在/conf文件夹新建三个配置文件，zoo1.cfg，zoo2.cfg以及
+            zoo3.cfg，配置文件如下编写
+            zoo1.cfg:
+                tickTime=2000
+                initLimit=10
+                syncLimit=5
+                dataDir=/tmp/zookeeper/d_1
+                clientPort=2181
+                server.1=localhost:2887:3887
+                server.2=localhost:2888:3888
+                server.3=localhost:2889:3889
+            zoo2.cfg
+                tickTime=2000
+                initLimit=10
+                syncLimit=5
+                dataDir=/tmp/zookeeper/d_2
+                clientPort=2182
+                server.1=localhost:2887:3887
+                server.2=localhost:2888:3888
+                server.3=localhost:2889:3889
+            zoo3.cfg
+                tickTime=2000
+                initLimit=10
+                syncLimit=5
+                dataDir=/tmp/zookeeper/d_3
+                clientPort=2183
+                server.1=localhost:2887:3887
+                server.2=localhost:2888:3888
+                server.3=localhost:2889:3889
+            注意IP和端口不要相互冲突就行
+        4,  创建myid文件
+            在d_1下面创建myid里面的内容为1
+            在d_2下面创建myid里面的内容为2
+            在d_3下面创建myid里面的内容为3
+        5,  执行脚本
+            ./zkServer.sh start zoo1.cfg
+            ./zkServer.sh start zoo2.cfg
+            ./zkServer.sh start zoo3.cfg
+            执行完毕后，将完成zookeeper的集群伪分布的启动。
