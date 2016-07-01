@@ -329,3 +329,91 @@
         在函数autoNorm()中，将每列的最小值放在变量minVals中，将最大值
         放在变量maxVals中，其中dataSet.min(0)中的参数0使得函数可以从
         列中选取最小值，而不是选取当前行的最小值。
+        对于某些数值处理软件包，/可能意味着举证除法；但在NumPy库中，
+        矩阵除法需要使用函数linalg.solve(matA,matB)。
+        在Python命令提示符下，重新加载kNN.py模块，执行autoNorm函数，
+        检测函数的执行结果：
+        >>> reload(kNN)
+        >>> normMat, range, minVals = kNN.autoNorm(datringDataMat)
+        >>> normMat 就会输出对应矩阵
+        >>> range   就会输出矩阵
+        >>> minVals 就会输出矩阵
+    11, 测试算法：作为完整程序验证分类器
+        分类器针对约会网站的测试代码
+        def datingClassTest():
+            hoRatio = 0.10
+            datingDataMat.datingLabels = file2matrix("datingTestSet.txt")
+            normMat, ranges, minVals = autoNorm(datingDataMat)
+            m = normMat.shape[0]
+            numTestVecs = int(m*hoRatio)
+            errorCount = 0.0
+            for i in range(numTestVecs):
+                calssifiexResult = classify0(normMat[i,:], normMat[numTestVecs:m,:],datingLabels(numTestVecs:m), 3)
+                print "the classifier came back with: %d, the real answer is : %d" % (classifierResult, datingLables[i])
+                if (classifierResult != datingLabels[i]) : errorCout += 1.0
+            print "the total error ratoe is: %f" %(errorCount/float(numTestVecs))
+        得到的结果是：处理约会数据集的错误率是2.4%，这是一个非常不错的
+        结果。我们可以改变函数datingClassTest内变量hoRatio和变量k的值
+        ，检测错误率是否随着变量值的变化而增加，依赖分类算法、数据集和
+        程序设置，分类器的输出结果有很大的不同。 
+    12, 实例：手写识别系统的步骤
+        1,  收集数据：提供文本文件
+        2,  准备数据：编写函数classify0()，将图像格式转换为分类器使用
+            的list格式。
+        3,  分析数据：在Python命令提示符中检查数据，确保它符合要求。
+        4,  训练算法：此步骤不使用于k-近邻算法
+        5,  测试算法：编写函数使用提供而的部分数据集作为测试样本，测试
+            样本与非测试样本的区别在于测试样本是已经完成分类的数据，如
+            果预测分类与实际类别不同，则标记为一个错误。
+        6,  使用算法：本例没有完成此步骤，从图像中提取数字，并完成数字
+            识别，美国的邮件分拣系统就是一个实际运行的类似系统。
+    13, 手写识别系统编写代码一:将图像格式化处理为一个向量。我们将一个
+        32*32二进制图像矩阵转换为1*1024的向量，这样前两节使用的分类器
+        就可以处理数字图像信息了。看代码
+        def img2vector(filename):
+            returnVect = zeros((1,1024))
+            fx = open(filename)
+            for i in range(32):
+                lineStr = fr.readline()
+                for j in range(32):
+                    returnVect[0, 32*i +j] = int(lineStr[j])
+            return returnVect
+        将上诉代码输入到kNN.py文件中，在Python命令行中输入下列命令测试
+        img2vector函数，然后与文本编辑器打开的文件进行比较：
+        >>> testVector = kNN.img2vector('testDigits/0_13.txt')
+        >>> testVector[0,0:31]
+        >>> testVector[0,32,63]
+    14, 手写识别系统编写代码二：测试算法，使用k-近邻算法识别手写数字
+        必须确保将from os import listdir写入文件的起始部分，这段代码
+        的主要功能是从os模块中导入函数listdir，它可以列出给定目录的文
+        件名。
+        def handwritingClassTest():
+            hsLabels = []
+            trainingFileList = listdir('trainingDigits')
+            m = len(trainingFileList)
+            trainingMat = zeros((m,1024))
+            for i in range(m):
+                fileNameStr = trainingFileList[i]
+                fileStr = fileNameStr.split('.')[0]
+                calssNumStr = int(fileStr.split('_')[0])
+                hwLabels.append(classNumStr)
+                trainingMat[i,:] = img2vector('trainingDigits/%s'
+                %fileNameStr)
+            testFileList = listdir('testDigits')
+            errorCount = 0.0
+            mTest= len(testFileList)
+            for i in range(mTest)
+                fileNameStr = testFileList[i]
+                fileStr = fileNameStr.split('.')[0]
+                calssNumStr = img2vector('testDigits/%s'%fileNameStr)
+                calssifierResult = calssify0(vectorUnderTest, 
+                    \trainingMat, hwLabels, 3)
+                print "the classifier came back with : %d, the real
+                    answer is : %d " %(classifierResult, classNumStr)
+                if (calssifierResult != classNumStr) : errorcount+=1.0
+            print "\nthe total number of errors is: %d"%errorCount
+            print "\nthe total error rato is: %f"%(errorCount/
+                float(nTest))
+        到此，k-近邻算法介绍完成了。 
+                
+            
