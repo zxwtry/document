@@ -191,3 +191,4 @@
             ./zkServer.sh start zoo2.cfg
             ./zkServer.sh start zoo3.cfg
             执行完毕后，将完成zookeeper的集群伪分布的启动。
+
