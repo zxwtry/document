@@ -1,0 +1,29 @@
+001 Java的Stack类中，非继承的方法只有四个：
+    boolean empty()
+    E   peek()
+    E   pop()
+    E   push(E item)
+    int search(Object o)    返回对象在堆栈中的位置，以1为基数
+002 isEmpty()是Vector的方法，JDK6的文档是这么说的
+    empty():
+        测试堆栈是否为空
+    isEmpty():
+        测试此向量是否不包含组件
+    注：为什么是JDK6？因为只有JDK6有中文版23333
+003 看empty()源代码(JDK8)
+    public boolean empty() {
+        return size() == 0;
+    }
+    size()又是Vector的方法。
+    public synchronized int size() {
+        return elementCount;
+    }
+004 看isEmpty()源代码(JDK8)
+    public synchronized boolean isEmpty() {
+        return elementCount == 0;
+    }
+005 至此，貌似empty和isEmpty的实现几乎完全一样。
+    为什么在Stack的方法里面不直接这样写呢？
+    public boolean empty() {
+        return isEmpty();
+    }
