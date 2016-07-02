@@ -121,14 +121,14 @@
             需求被实时或者近实时地存储起来，然后直接查询外部存储中的
             计算结果。
 010:    先需要搭建Zookeeper集群：单机模式
-        1， 下载zookeeper二进制安装包
-            官网地址是https://zookeeper.apache.org/
+        1， 下载ZooKeeper二进制安装包
+            官网地址是https://ZooKeeper.apache.org/
             下载最新版的tar.gz包就行了。
-            现在的最新版是zookeeper-3.5.1-alpha.tar.gz
-        2,  解压zookeeper安装包
-            tar -zxvf zookeeper.tar.gz
+            现在的最新版是ZooKeeper-3.5.1-alpha.tar.gz
+        2,  解压ZooKeeper安装包
+            tar -zxvf ZooKeeper.tar.gz
         3,  设置环境变量
-            ZOOKEEPER_HOME=/home/software/zookeeper
+            ZOOKEEPER_HOME=/home/software/ZooKeeper
             export ZOOKEEPER_HOME
             PATH添加$ZOOKEEPER_HOME/bin
             CLASSPATH添加$ZOOKEEPER_HOME/lib
@@ -136,7 +136,7 @@
             进入$ZOOKEEPER_HOME/conf
             cp zoo_sample.cfg zoo.cfg
         5,  启动zookeepr
-            查看zookeeper端口
+            查看ZooKeeper端口
                 netstat -at | grep 2181
             查看端口信息
                 netstat -nat
@@ -146,9 +146,9 @@
                 bin/./zkServer.sh stop
             查看java进程
                 jps
-011:    先需要搭建zookeeper集群：伪集群模式
-        1,  其实在企业中不会存在，就是在单机下模拟集群的zookeeper服务
-            ，在一台机器上面有多个zookeeper的JVM同时运行
+011:    先需要搭建ZooKeeper集群：伪集群模式
+        1,  其实在企业中不会存在，就是在单机下模拟集群的ZooKeeper服务
+            ，在一台机器上面有多个ZooKeeper的JVM同时运行
         2,  确认集群为服务器的数量
             2*n+1
         3,  编写配置文件
@@ -190,5 +190,7 @@
             ./zkServer.sh start zoo1.cfg
             ./zkServer.sh start zoo2.cfg
             ./zkServer.sh start zoo3.cfg
-            执行完毕后，将完成zookeeper的集群伪分布的启动。
+            执行完毕后，将完成ZooKeeper的集群伪分布的启动。
+012     ZooKeeper运行的时候，需要将lib文件里面*.jar添加到$JRE/lib/ext
+        文件夹中。这样启动的时候，就不会出错了。
 
