@@ -18,7 +18,8 @@
     5,  一般Bloom Filter常与key-value的数据库一起使用，加快查询。所以
         Bloom Filter所占的空间非常小，可以常驻内存。
     6,  Bloom Filter的应用一：key-value加快查询
-        就是在storage之前添加一个filter。具体见imgs/000001.png
+        就是在storage之前添加一个filter。具体见files/imgs/
+        F001_Bloom_Filter.png
     7,  Bloom Filter的应用二：URL查重
         *已经在Big Table上面实际使用，减少IO压力
     8,  Bloom Filter的应用三：Proxy-Cache
