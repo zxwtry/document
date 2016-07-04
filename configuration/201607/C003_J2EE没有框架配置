@@ -15,3 +15,11 @@
         <servlet-name>Login</servlet-name>
         <url-pattern>/Login</url-pattern>
     </servlet-mapping>
+配置003:    PrintWriter输出中文乱码
+    正常PrintWriter pw = response.getWriter();
+    在上句之前，添加
+    response.setContentType("text/html;charset=utf-8");
+    这样可以处理大部分乱码。
+配置004:    使用form提交表单的时候enctype的选择
+    如果是需要上传文件等等，使用"multipart/form-data"
+    如果是简单的账户和密码：使用"application/json"或"text/plain"
