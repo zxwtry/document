@@ -12,12 +12,59 @@ sc stop beep
 	查看网关信息： netstat -rn
 
 配置003：设置固定ip，
-修改 /etc/network/interfaces
-	将auto eth0下面的东西修改成为：
-		iface eth0 inet static
-		address [自己定义的ip]
-		netmask [参看修改之前的]
-		gateway
+    [Ubuntu]
+        修改 /etc/network/interfaces
+	    将auto eth0下面的东西修改成为：
+		    iface eth0 inet static
+		    address [自己定义的ip]
+		    netmask [参看修改之前的]
+		    gateway
+    [CentOS 7]
+        方法有很多，区别在于是否使用NetworkManager
+        1,  NetworkManager是一个动态网络的控制器与配置系统，它用于当
+            网络设备可用时保持设备和连接开启并激活。默认的情况下，
+            CentOS/RHEL 7安装有NetworkManager，并出于激活状态。
+        2,  验证NetworkManager服务的状态：
+            systemctl status NetworkManager.service
+            检查受网络管理器管理的网络接口：
+            nmcli dev status
+            如果某个接口的nmcli的输出结果是"connected"，意思是：该接
+            口受网络管理器管理。可以为某个特定接口禁用网络管理器，以
+            便为它配置一个静态IP地址。
+        3,  不使用NetworkManager配置静态IP地址
+            进入/etc/sysconfig/network-scripts目录，找到该接口的配置
+            文件（ifcfg-xxxx），如果没有创建一个。
+            打开配置文件并编辑以下变量：
+                HWADDR=""
+                TYPE="Ethernet"
+                BOOTPROTO="static"
+                IPADDR=192.168.0.17
+                NETMASK=255.255.255.0
+                NM_CONTROLLED=no
+                DEFROUTE="yes"
+                PEERDNS="yes"
+                PEERROUTES="yes"
+                NAME="xxxx"
+                ONBOOT="yes"
+            "NM_CONTROLLED=no"表示该接口将通过该配置文件进行设置，而
+            不是通过NetworkManager进行管理。"ONBOOT=yes"告诉我们，系
+            统将在启动时开启该接口。
+            保存修改并使用以下命令来重启NetworkManager服务：
+                systemctl restart network.service
+            验证接口是否配置正确：
+                ip add
+        4,  使用网络管理器配置静态IP地址：
+            可以使用nmtui(网络管理器文本用户界面)，提供了在终端环境中
+            配置网络管理器的方式。
+            在使用nmtui之前，首先要在/etc/sysconfig/network-scripts/ifcfg-xxxx
+            最后那个设置"NM_CONTROLLED=yes"
+            安装nmtui：
+                yum install NetworkManager-tui
+            编辑xxxx接口的网络管理器配置：
+                nmtui edit xxxx
+            会出现GUI界面，可以手动输入/etc/sysconfig/network-scripts/ifcfg-xxxx中所包含的内容相同的信息。
+            最后，重启网络服务
+                systemctl restart network.service
 
 配置004：Linux允许root远程ssh登陆
 	vim /etc/ssh/sshd_config
