@@ -225,4 +225,5 @@
                 该成CLogger& CLogger::getLogger()
             b,  在tb-common-utils文件中./build.sh
                 出现下图最后一行，才是成功。
-            ![tb-common-utils成功](http://ww4.sinaimg.cn/large/7159f555jw1f5iur93degj20pl05pgmt.jpg)
+                图片在files/img/F003-tb-common-utils成功
+            c,  
