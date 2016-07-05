@@ -193,4 +193,36 @@
             执行完毕后，将完成ZooKeeper的集群伪分布的启动。
 012     ZooKeeper运行的时候，需要将lib文件里面*.jar添加到$JRE/lib/ext
         文件夹中。这样启动的时候，就不会出错了。
-
+013	    Alibaba-RocketMQ：
+        1,  下载alibaba-rocketmq-3.2.6.tar.gz
+        2,  启动 cd rocketmq/bin
+            nohup sh mqnamesrv -n 192.168.160.132:9876 & 
+            nohup sh mqbroker -n 192.168.160.132:9876 &
+            启动之后，查看jps，可以看到
+            BrokerStartup
+            NamesrvStartup
+        3,  maven构建环境
+            <dependency>  
+                <groupId>com.alibaba.rocketmq</groupId>  
+                <artifactId>rocketmq-client</artifactId>  
+                <version>3.2.3</version>  
+            </dependency>
+        4,  具体代码见/store/demo/201607
+014     tair淘宝自己开发的分布式key/value存储引擎
+        1,  非持久化的tair类似分布式缓存
+            持久化的tair将数据存放于磁盘
+        2,  获取源代码
+            svn checkout http://code.taobao.org/svn/tb-common-utils/trunk/ tb-common-utils
+            svn checkout http://code.taobao.org/svn/tair/trunk/ tair
+        3,  安装依赖库
+            a,  yum install libtool
+            b,  yum install boost-devel
+            c,  yum install zlib-devel
+        4， 安装tair之安装tbnet tbsys(在tb-common-utils)
+            a,  可能有这个问题。
+                在安装的过程中，出现一大堆C++的错误，解决的办法是：
+                vim tbsys/src/tblog.cpp 323行 将CLogger::CLogger& CLogger::getLogger()
+                该成CLogger& CLogger::getLogger()
+            b,  在tb-common-utils文件中./build.sh
+                出现下图最后一行，才是成功。
+            ![tb-common-utils成功](http://ww4.sinaimg.cn/large/7159f555jw1f5iur93degj20pl05pgmt.jpg)
