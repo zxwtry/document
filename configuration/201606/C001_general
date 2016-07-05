@@ -46,6 +46,7 @@ sc stop beep
                 PEERROUTES="yes"
                 NAME="xxxx"
                 ONBOOT="yes"
+            必须要设置GATEWAY和DNS1
             "NM_CONTROLLED=no"表示该接口将通过该配置文件进行设置，而
             不是通过NetworkManager进行管理。"ONBOOT=yes"告诉我们，系
             统将在启动时开启该接口。
@@ -273,3 +274,11 @@ Linux 自行安装jdk
 配置028：第一列的颜色和其他列都不一样，在任何文件上都这样，怎么恢复？
     这个原因是执行了1,$s/^/#/g这个命令之后，第一行颜色就和其他的不一
     样。想想这个代码也是够魔性的。恢复的方法是let @/ = ""
+
+配置029：重启服务
+    [Ubuntu]
+        /etc/init.d/tomcat7 restart
+        service tomcat7 restart
+    [CentOS7]
+        systemctl restart tomcat7.service
+        注意ssh的是sshd.service
