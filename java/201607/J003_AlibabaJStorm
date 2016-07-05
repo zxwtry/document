@@ -299,3 +299,29 @@
                 #group name
                 [group_1]
                 _server_list=10.10.7.146:51910
+        10, 启动方式
+            在自己默认的第一台CentOS上面
+            #设置tmpfs运行大小
+            ./set_shm.sh
+            #启动DataServer
+            ./tair.sh start_ds
+            #启动ConfigServer
+            ./tair.sh start_cs
+            #检查下进程是否在
+            pgrep -lf tair
+            启动之后，进行测试：
+            ./sbin/tairclient -c 192.168.160.150:5198 -g group_1
+            TAIR>health
+                    server              status
+             192.168.169.152:5191       alive
+             192.168.169.153:5191       alive
+                    migrate             ongoing
+                 isMigrating            false
+                    server              ping
+             192.168.169.152:5191       2.960000
+             192.168.169.153:5191       1.268000
+            TAIR>put k1 v1
+                put: success
+            TAIR>get k1
+                KEY: k1, LEN: 2
+                raw data: v1, \76\31
