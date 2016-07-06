@@ -226,4 +226,76 @@
             b,  在tb-common-utils文件中./build.sh
                 出现下图最后一行，才是成功。
                 图片在files/img/F003-tb-common-utils成功
-            c,  
+        5,  编译安装tair
+            进入tair源码目录，依次按以下顺序编译安装：
+            ./bootstrap.sh
+            ./configure     #可以使用--with-boost=xxx来执行boost目录
+                            #使用--with-release=yes来编译release版本
+            make
+            make install
+            安装成功后，会在当前~目录下生成文件夹tair_bin，即tair的安
+            装成功后的目录。
+        6， 部署配置：
+            tair的运行，至少需要一个config server和一个data server。
+            推荐使用两个config server多个data server的方式。两个
+            config server有主备之分。
+            tair有三个配置文件的样例：
+                cp configserver.conf.default configserver.conf
+                cp dataserver.conf.default dataserver.conf
+                cp group.conf.default group.conf
+            部署环境：
+                server          IP        Port    num    Linux version
+            config server   10.10.7.144   51980    1        CentOS 7
+            data server     10.10.7.146   51910    1        CentOS 7
+        7,  配置config server
+            a,  首先需要配置config server的服务器地址和端口号，端口号
+                可以默认，服务器地址改成自己的，有一主一备两台
+                configserver，这里仅为测试使用就设置一台。
+            b,  log_file/pid_file等的路径设置最好用绝对路径，默认的是
+                相对路径，需要更改。注意data文件和log文件非常重要，
+                data文件不可缺少，而log文件是部署出错后能给你详细的出
+                错原因。
+            c,  dev_name很重要，需要使之为你自己当前网络接口的名称，
+                默认为eth0，(ifconfig查看网络接口名称)
+            d,  具体配置文件详情：
+                [public]
+                config_server=10.10.7.144:51980
+                [configserver]
+                port=51980
+                log_file=/home/dataserver1/tair_bin/logs/config.log
+                pid_file=/home/dataserver1/tair_bin/logs/config.pid
+                log_level=warn
+                group_file=/home/dataserver1/tair_bin/etc/group.conf
+                data_dir=/home/dataserver1/tair_bin/data/data
+                dev_name=venet0:0
+        8,  配置data server
+            a,  下面文件中config_server的配置与之前必须完全相同。
+            b,  这里面的port和heartbeat_port是data server的端口号和心
+                跳端口号，必须确保系统能给你使用这些端口号。一般默认
+                即可，这里修改的原因是某些Linux系统只允许30000以后的
+                端口号，根据自己情况修改。
+            c,  data文件、log文件等很重要，与前一样，最好用绝对路径。
+            d,  具体需要修改的文件：
+                [public]
+                config_server=10.10.7.144:51980
+                [tairserver]
+                storage_engine=ldb
+                port=51910
+                heartbeat_port=55910
+                log_file=/home/dataserver1/tair_bin/logs/server.log
+                pid_file=/home/dataserver1/tair_bin/logs/server.pid
+                log_level=warn
+                dev_name:venet0:0
+                [fdb]
+                data_dir=/home/dataserver1/tair_bin/data/fdb
+                [kdb]
+                data_dir=/home/dataserver1/tair_bin/data/kdb
+                [ldb]
+                data_dir=/home/dataserver1/tair_bin/data/ldb
+        9,  配置group信息
+            a,  这个文件只配置了data server列表，只有一个dataserver，
+                因此只需配置一个。
+            b,  具体需要修改的文件：
+                #group name
+                [group_1]
+                _server_list=10.10.7.146:51910
