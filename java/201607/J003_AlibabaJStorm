@@ -301,6 +301,10 @@
                 _server_list=10.10.7.146:51910
         10, 启动方式
             在自己默认的第一台CentOS上面
+            dataserver端启动
+                sbin/tair_server -f etc/dataserver.conf
+            config server端启动
+                sbin/tair_cfg_svr -f etc/configserver.conf
             #设置tmpfs运行大小
             ./set_shm.sh
             #启动DataServer
@@ -310,7 +314,7 @@
             #检查下进程是否在
             pgrep -lf tair
             启动之后，进行测试：
-            ./sbin/tairclient -c 192.168.160.150:5198 -g group_1
+            ./sbin/tairclient -c 192.168.160.150:51980 -g group_1
             TAIR>health
                     server              status
              192.168.169.152:5191       alive
@@ -325,3 +329,8 @@
             TAIR>get k1
                 KEY: k1, LEN: 2
                 raw data: v1, \76\31
+        11, 常见问题：
+            a,  如果出现正常配置，却不能配置成功的话，删除tair_bin目
+                录下面的data和logs文件。
+            b,  注意所有目录最好都写绝对目录，相对目录容易出现莫名错误。
+            c,  使用tair最好使用CentOS，Ubuntu下面问题更多。。。
