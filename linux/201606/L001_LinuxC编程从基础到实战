@@ -733,4 +733,21 @@
         3,  使用size命令查看一个可执行文件的正文段、数据段和bss段的长
             度信息，单位是字节。
         4， files/imgs/F008_Linux中典型的段分配方式
+    045 Linux中C语言代码的出错处理
+        1,  在Linux中，如果调用的函数出现错误事件，往往会返回一个负值
+            ，并且此时整型变量errno常常会被设置为含有附加信息的一个值
+        2,  在errno.h文件中Linux定义了常用的错误常量
+        3， errno的定义如下，其可以是一个包含出错编号的整数，也可以是
+            一个返回出错编号指针的函数：
+            extern int errno;
+        4,  对于errno而言，其有如下两条规则：
+            a,  如果没有出错，则errno的值并不会被一个例程清除，因此可
+            以当函数返回值指明出错的时候才去检查error的值。
+            b,  任何一个函数都不会把errno设置为0。
+        5， Linux使用strerror和perror函数来打印相应的出错信息，对这两
+            个函数的标准调用格式说明如下：
+            #include<string.h>
+            char *strerror(int errnum);
+            #include<Stdio.h>
+            void perror(const char *msg);
 
