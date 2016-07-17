@@ -1,0 +1,4 @@
+source: http://www.cs.cornell.edu/courses/cs6740/2010sp/guides/lec11.pdf
+1 Introduction
+    In many language-related tasks, it would be extremely useful to know the probability that a sentence or word sequence will occur in a document. However, there is not enough data to account for all word sequences. Thus, n-gram models are used to approximate the probability of word sequences. Making an independence assumption between the n-grams reduces some of the problems with data sparsity, but even n-gram models can have sparsity problems. For example, the Google corpus has 1 trillion words of running English text. There are 13 million words that occur over 200 times, so there are at least 169 trillion potential bigrams - much more than the 1 trillion words in the corpus. Smoothing is a strategy used to account for this data sparsity. In this lecture, we will explore Good-Turing smoothing, a particular kind of smoothing.
+    
