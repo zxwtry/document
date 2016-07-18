@@ -746,8 +746,25 @@
             b,  任何一个函数都不会把errno设置为0。
         5， Linux使用strerror和perror函数来打印相应的出错信息，对这两
             个函数的标准调用格式说明如下：
-            #include<string.h>
-            char *strerror(int errnum);
-            #include<Stdio.h>
-            void perror(const char *msg);
+            	#include<string.h>
+            	char *strerror(int errnum);
+            	#include<Stdio.h>
+            	void perror(const char *msg);
+			strerror函数的返回值是一个指向消息字符串的指针，这个消息
+			字符串即为出错信息的字符串；而peeror函数没有返回值，其输
+			出如下：
+				"由msg指针指向的字符串"+"："+" "+"回车换行"
+		6,	strerror和perror函数应用实例
+			分别调用strerror函数输出了一个EACCES错误对应的错误提示，
+			调用perror函数给出了一个带调用执行文件名的错误提示。
+			实例的应用代码如下：
+				#include<string.h>
+				#include<stdio.h>
+				#include<errno.h>
+				int main(int argc, char *argv[]) {
+					fprintf(stderr, "EACCES:%s\n", strerror(EACCES));
+					errno = ENOSPC;
+					perror(argv[0]);
+					return 0;
+				}
 
