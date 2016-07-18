@@ -46,3 +46,11 @@
         g,  不同电脑，同一个项目
             git fetch --all
             git reset --hard origin/master
+	1.3	20160718碰到的一个非常2的问题：
+		github用ssh登录的步骤：
+			git clone 
+			ssh-keygen
+			添加id_rsa.pub
+		发现，不行，总是要输入密码。。。
+		各种折腾，最后发现，自己git clone [url]中url是HTTPS的url
+		诶，又乱折腾。。。
