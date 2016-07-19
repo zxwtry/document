@@ -1,14 +1,112 @@
-note001:
+n001:
     JVM是一台虚拟机，使用软件模拟Java字节码的指令集。除了PC寄存器，没有复杂寄存器。
     JVM:    JRockit和Hotspot
     在Hotspot基础上，移植JRockit优秀特性
-note002:    JVM规范
+n002:    JVM规范
     --- Class文件类型
     --- 运行时数据
     --- 帧栈
     --- 虚拟机的启动
     --- 虚拟机的指令集
-note003:    Java
+n003:    Java堆
+	---	和程序开发密切
+	---	对象都在Java堆中
+	---	线程共享
+n004:	Java栈
+	---	线程私有
+	---	方法调用：新的帧
+n005:	局部变量表 包含参数和局部变量
+	---	static 和实例方法是不同的。
+n006:	Java没有寄存器，所有参数传递使用操作数栈
+n007:	栈上分配的好处，不会出现内存泄漏。
+n008:	-server -Xmx10m -Xms10m
+		-XX:+DoEscapeAnalysis -XX:+PrintGC
+		栈上分配 
+		和
+		-server -Xmx10m -Xms10m
+		-XX:-DoEscapeAnalysis -XX:+PrintGC
+		堆上分配
+		是很不同的。	
+n009:	Java栈-栈上分配
+	---	小
+	---	自动回收
+	---	线程私有
+n010:	主内存和线程私有内存
+n011:	volatile比重量级锁性能好。
+		多个线程对volatile进行写的时候，不安全。
+n012:	保证可见性方法：
+		一个线程修改了变量，其他线程可以立即知道
+	1,	volatile
+	2,	synchronized(unlock之前，写回内存)
+	3,	final
+n013:	有序性：
+	1,	本线程内，有序
+	2,	线程外观察，无序(指令重排，主内存同步延迟)
+n014:	指令重排的基本原则：
+	1,	程序顺序原则
+	2,	volatile，先写后读
+	3,	锁规则，解锁先于加锁
+	4,	传递性
+	5，	线程start先于all
+	6,	线程所有操作先于线程的终结(Thread.join())
+	7,	线程的中断(interrupt())先于被中断线程的代码
+	8,	对象的构造函数执行结束先于finalize()方法
+n015:	Trace跟踪参数
+	1,	-verbose:gc
+	2,	-XX:+PrintGC
+	3,	-XX:+PrintGCDetails
+	4,	-XX:+PrintGCTimeDetails
+	5,	-Xloggc:log/gc.log
+	6,	-XX:+TraceClassLoading
+	7,	-XX:+PrintClassHistogram
+		按下Ctrl+Break后，打印类信息
+	8,	-Xmx   -Xms
+		最大堆 最小堆
+	9,	-Xmn	-XX:NewRatio
+		新生代	年老代:新生代(eden+2*s)
+	10,	-XX:SurvivorRatio
+		eden : survivor
+		eg 8
+		eden 8/10
+		s	 1/10
+		s	 1/10
+	11,	-XX:+HeapDumpOnOutOfMemoryError
+		OOM时导出堆到文件
+	12,	-XX:+HeapDumpPath
+		导出OOM的路径
+	13,	-XX:OnOutOfMemoryError
+		在OOM时，执行一个脚本
+		=/////.bat %p
+	14,	-XX:PermSize	-XX:MaxpermSize
+		永久区初始		最大空间
+		CGLIB
+	15,	-Xss
+		栈
 
-
-
+n016:	问题：
+	1,	-Xmx和-Xms的比例
+	2,	JRE瘦身
+n017:	GC的对象是堆空间和永久区
+n018:	引用计数
+	1,	标记使用数量
+	2,	COM
+		ActionScrpt3
+		Python
+	3,	加法减法
+		循环引用
+n019:	标记-清除
+	1,	通过根节点，标记可达对象
+	2,	清除不可达对象
+n020:	标记-压缩
+	1,	标记，移动存活对象到一边
+	2,	清除其余
+n021:	复制
+	1,	不适用存活对象多的，如年老代
+	2,	两块内存空间
+n022:	可触及
+	1,	可触及
+		从根节点
+	2,	可复活
+		finalize()中可能复活该对象
+	3,	不可触及
+		finalize()后，可能进入不可触及
