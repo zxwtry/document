@@ -185,3 +185,96 @@ n030:	GC参数-CMS收集器
 				-XX:CMSInitiatingOccupancyFraction (百分比)
 				concurrent mode failure
 				使用串行收集器作为后备
+		9,	-XX:+UseCMSCompactAtFullCollection Full GC后进行一次整理
+			-XX:CMSFullGCsBeforeCompaction	几次Full GC
+			-XX:ParallelCMSThreads	CMS线程数量
+		10,	减轻GC压力
+n031:	串行并行	标记-压缩
+n032:	类装载器
+		1,	class装载验证流程
+		2,	什么是类装载器ClassLoader
+		3,	JDK中ClassLoader默认设计模式
+		4,	打破常规模式
+		5,	热替换
+n033:	class装载验证流程
+		1，	加载
+		2,	链接
+			a,	验证
+			b,	准备
+			c,	解析
+		3,	初始化
+n034:	class装载验证流程-加载
+		1,	装载类的第一个阶段
+		2,	取得类的二进制流
+		3,	转为方法区数据结构
+		4,	在Java堆中生成对应的java.lang.Class对象
+n035:	class装载验证流程-验证
+		目的：	保证Class流的格式是正确的
+		1,	文件格式的验证
+			是否以0xCAFEBABE开头
+			版本号是否合理
+		2,	元数据验证
+			是否有父类
+			继承了final类
+			非抽象类实现了所有的抽象方法
+		3,	字节码验证(复杂)
+		4，	符号引用验证
+			常量池中描述类是否存在
+			权限
+n036:	class装载验证流程-链接准备
+		1,	分配内存，并为类设置初始值(方法区中)
+			public static int v = 1;
+				在准备阶段，v会被设置成0
+				在初始化的<clinit>中才会被设置为1
+			public static final int v = 1;
+				在准备阶段设置为1
+n037:	class装载验证流程-链接解析
+		1,	符号引用替换为直接引用
+						  内存地址
+n038:	class装载验证流程-初始化
+		1,	执行类构造器<clinit>
+			static变量 赋值语句
+			static{} 语句
+		2,	子类的<clinit>调用前保证父类的<clinit>被调用
+		3,	<clinit>是线程安全的
+n039:	Java.lang.NoSuchFieldError可能在那些阶段出现
+n040:	什么是类装载器ClassLoader
+		1,	抽象类
+		2,	实例负责读入Java字节码将类装载到JVM中
+		3,	可以定制，满足不同的字节码流获取方式
+		4,	负责类装载过程中的加载阶段
+n041:	ClassLoader的重要方法：
+		1,	public Class<?> loadClass(String name) throws ClassNotFoundException
+			装入并返回一个Class
+		2,	protected final Class<?> defineClass(byte[] b, int off, int len)
+			定义一个类，不公开调用
+		3,	protected Class<?> findClass(String name) throws ClassNotFoundException
+			loadClass回调该方法，自定义ClassLoader的推荐做法
+		4,	protected final Class<?> findLoadedClass(String name)
+			寻找已经加载的类
+n042:	JDK中ClassLoader默认设计模式-分类/协同工作
+		1,	BootStrap ClassLoader 	(启动ClassLoader)					rt.jar / -Xbootclasspath
+		2,	Extension ClassLoader 	(扩展ClassLoader)					%JAVA_HOME%/lib/etc/*.jar
+		3,	App ClassLoader 		(应用ClassLoader/系统ClassLoader)	classpath下
+		4,	Custom ClassLoader 		(自定义ClassLoader)
+		5,	每个ClassLoader都有一个Parent作为父亲，BootStrap ClassLoader是没有的。
+		6,	自底向上检查是否已经加载
+		7,	自顶向下尝试加载类
+n043:	JDK中ClassLoader默认设计模式-协同工作
+		protected Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
+			synchronized (getClassLoadingLock(name)) {
+				Class c = findLoadedClass(name);
+				if (c == null) {
+					long t0 = System.nanoTime();
+					try {
+						if (parent != null) {
+							c = parent.loadClass(name, false);
+						} else {
+							c = findBootstrapClassOrNull(name);
+						}
+					} catch (ClassNotFoundException e) {
+
+					}
+				}
+			}
+		}
