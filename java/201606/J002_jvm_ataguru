@@ -1,22 +1,22 @@
-n001:
-    JVM是一台虚拟机，使用软件模拟Java字节码的指令集。除了PC寄存器，没有复杂寄存器。
-    JVM:    JRockit和Hotspot
-    在Hotspot基础上，移植JRockit优秀特性
+n001:	JVM
+	    JVM是一台虚拟机，使用软件模拟Java字节码的指令集。除了PC寄存器，没有复杂寄存器。
+	    JVM:    JRockit和Hotspot
+	    在Hotspot基础上，移植JRockit优秀特性
 n002:    JVM规范
-    --- Class文件类型
-    --- 运行时数据
-    --- 帧栈
-    --- 虚拟机的启动
-    --- 虚拟机的指令集
+	    1,	Class文件类型
+	    2, 	运行时数据
+	    3,	帧栈
+	    4,	虚拟机的启动
+   	 	5,	虚拟机的指令集
 n003:    Java堆
-	---	和程序开发密切
-	---	对象都在Java堆中
-	---	线程共享
+		1,	和程序开发密切
+		2,	对象都在Java堆中
+		3,	线程共享
 n004:	Java栈
-	---	线程私有
-	---	方法调用：新的帧
+		1,	线程私有
+		2,	方法调用：新的帧
 n005:	局部变量表 包含参数和局部变量
-	---	static 和实例方法是不同的。
+		1,	static 和实例方法是不同的。
 n006:	Java没有寄存器，所有参数传递使用操作数栈
 n007:	栈上分配的好处，不会出现内存泄漏。
 n008:	-server -Xmx10m -Xms10m
@@ -28,103 +28,160 @@ n008:	-server -Xmx10m -Xms10m
 		堆上分配
 		是很不同的。	
 n009:	Java栈-栈上分配
-	---	小
-	---	自动回收
-	---	线程私有
+		1,	小
+		2,	自动回收
+		3,	线程私有
 n010:	主内存和线程私有内存
 n011:	volatile比重量级锁性能好。
 		多个线程对volatile进行写的时候，不安全。
 n012:	保证可见性方法：
 		一个线程修改了变量，其他线程可以立即知道
-	1,	volatile
-	2,	synchronized(unlock之前，写回内存)
-	3,	final
+		1,	volatile
+		2,	synchronized(unlock之前，写回内存)
+		3,	final
 n013:	有序性：
-	1,	本线程内，有序
-	2,	线程外观察，无序(指令重排，主内存同步延迟)
+		1,	本线程内，有序
+		2,	线程外观察，无序(指令重排，主内存同步延迟)
 n014:	指令重排的基本原则：
-	1,	程序顺序原则
-	2,	volatile，先写后读
-	3,	锁规则，解锁先于加锁
-	4,	传递性
-	5，	线程start先于all
-	6,	线程所有操作先于线程的终结(Thread.join())
-	7,	线程的中断(interrupt())先于被中断线程的代码
-	8,	对象的构造函数执行结束先于finalize()方法
+		1,	程序顺序原则
+		2,	volatile，先写后读
+		3,	锁规则，解锁先于加锁
+		4,	传递性
+		5，	线程start先于all
+		6,	线程所有操作先于线程的终结(Thread.join())
+		7,	线程的中断(interrupt())先于被中断线程的代码
+		8,	对象的构造函数执行结束先于finalize()方法
 n015:	Trace跟踪参数
-	1,	-verbose:gc
-	2,	-XX:+PrintGC
-	3,	-XX:+PrintGCDetails
-	4,	-XX:+PrintGCTimeDetails
-	5,	-Xloggc:log/gc.log
-	6,	-XX:+TraceClassLoading
-	7,	-XX:+PrintClassHistogram
-		按下Ctrl+Break后，打印类信息
-	8,	-Xmx   -Xms
-		最大堆 最小堆
-	9,	-Xmn	-XX:NewRatio
-		新生代	年老代:新生代(eden+2*s)
-	10,	-XX:SurvivorRatio
-		eden : survivor
-		eg 8
-		eden 8/10
-		s	 1/10
-		s	 1/10
-	11,	-XX:+HeapDumpOnOutOfMemoryError
-		OOM时导出堆到文件
-	12,	-XX:+HeapDumpPath
-		导出OOM的路径
-	13,	-XX:OnOutOfMemoryError
-		在OOM时，执行一个脚本
-		=/////.bat %p
-	14,	-XX:PermSize	-XX:MaxpermSize
-		永久区初始		最大空间
-		CGLIB
-	15,	-Xss
-		栈
+		1,	-verbose:gc
+		2,	-XX:+PrintGC
+		3,	-XX:+PrintGCDetails
+		4,	-XX:+PrintGCTimeDetails
+		5,	-Xloggc:log/gc.log
+		6,	-XX:+TraceClassLoading
+		7,	-XX:+PrintClassHistogram
+			按下Ctrl+Break后，打印类信息
+		8,	-Xmx   -Xms
+			最大堆 最小堆
+		9,	-Xmn	-XX:NewRatio
+			新生代	年老代:新生代(eden+2*s)
+		10,	-XX:SurvivorRatio
+			eden : survivor
+			eg 8
+			eden 8/10
+			s	 1/10
+			s	 1/10
+		11,	-XX:+HeapDumpOnOutOfMemoryError
+			OOM时导出堆到文件
+		12,	-XX:+HeapDumpPath
+			导出OOM的路径
+		13,	-XX:OnOutOfMemoryError
+			在OOM时，执行一个脚本
+			=/////.bat %p
+		14,	-XX:PermSize	-XX:MaxpermSize
+			永久区初始		最大空间
+			CGLIB
+		15,	-Xss
+			栈
 
 n016:	问题：
-	1,	-Xmx和-Xms的比例
-	2,	JRE瘦身
+		1,	-Xmx和-Xms的比例
+		2,	JRE瘦身
 n017:	GC的对象是堆空间和永久区
 n018:	引用计数
-	1,	标记使用数量
-	2,	COM
-		ActionScrpt3
-		Python
-	3,	加法减法
-		循环引用
+		1,	标记使用数量
+		2,	COM
+			ActionScrpt3
+			Python
+		3,	加法减法
+			循环引用
 n019:	标记-清除
-	1,	通过根节点，标记可达对象
-	2,	清除不可达对象
+		1,	通过根节点，标记可达对象
+		2,	清除不可达对象
 n020:	标记-压缩
-	1,	标记，移动存活对象到一边
-	2,	清除其余
+		1,	标记，移动存活对象到一边
+		2,	清除其余
 n021:	复制
-	1,	不适用存活对象多的，如年老代
-	2,	两块内存空间
+		1,	不适用存活对象多的，如年老代
+		2,	两块内存空间
 n022:	可触及
-	1,	可触及
-		从根节点
-	2,	可复活
-		finalize()中可能复活该对象
-	3,	不可触及
-		finalize()后，可能进入不可触及
-	*,	经验：
-		避免使用finalize()，操作不慎可能导致错误。
-		优先级低，何时被调用不确定
-		可以使用try-catch-finally来代替
+		1,	可触及
+			从根节点
+		2,	可复活
+			finalize()中可能复活该对象
+		3,	不可触及
+			finalize()后，可能进入不可触及
+		*,	经验：
+			避免使用finalize()，操作不慎可能导致错误。
+			优先级低，何时被调用不确定
+			可以使用try-catch-finally来代替
 n023:	根
-	1,	栈中的对象
-	2,	方法区中静态成员或者常量引用的对象(全局对象)
-	3,	JNI方法栈中引用的对象
+		1,	栈中的对象
+		2,	方法区中静态成员或者常量引用的对象(全局对象)
+		3,	JNI方法栈中引用的对象
 n024:	Stop-The-World
-	1,	全局暂停
-	2,	所有Java代码停止，native代码可以执行，但不能和JVM交互
-	3,	多半由于GC引起
-		*	Dump线程
-		*	死锁检查
-		*	堆Dump
-	4,	危害
-		暂停服务
-		HA系统，主备切换，主备同时存在。
+		1,	全局暂停
+		2,	所有Java代码停止，native代码可以执行，但不能和JVM交互
+		3,	多半由于GC引起
+			*	Dump线程
+			*	死锁检查
+			*	堆Dump
+		4,	危害
+			暂停服务
+			HA系统，主备切换，主备同时存在。
+n025:	eden	s0	s1	tenured
+n026:	GC参数-串行收集器
+		1,	最古老，最稳定
+		2,	效率高
+		3,	可能会产生较长的停顿
+		4,	-XX:+UseSerialGC
+			新生代，老年代使用串行回收
+			新生代复制算法
+			老年代标记-压缩
+n027:	GC参数-并行收集器
+		1,	ParNew:
+			-XX:+UseParNewGC
+			新生代并行
+			老年代串行
+		2,	Serial收集器新生代的并行版本
+		3,	复制算法
+		4,	多线程，需要处理器支持
+		5,	-XX:ParallelGCThreads	限制线程数量
+		6,	多线程不一定快
+n028:	GC参数-并行收集器
+		1,	Parallel收集器
+		2,	类似ParNew
+		3，	新生代复制算法
+		4,	老年代 标记-压缩
+		5,	更加关注吞吐量
+		6,	-XX:+UseParallelGC
+			使用Parallel收集器+串行老年代
+		7,	-XX:+UseParallelOldGC
+			使用Parallel收集器+并行老年代
+n029:	GC参数-并行收集器
+		1,	-XX:MaxGCPauseMills
+			最大停顿时间
+		2,	-XX:GCTimeRatio
+			0-100
+			非垃圾收集时间占总时间的比
+			默认99
+		3,	1和2是有矛盾的。停顿时间和吞吐量
+n030:	GC参数-CMS收集器
+		1,	Concurrent Mark Sweep并发标记清除
+		2,	标记-清除算法
+		3,	交替(和用户线程)
+		4,	与标记-压缩相比，并发阶段会降低吞吐量
+		5,	年老代收集器（新生代使用ParNew）
+		6,	-XX:+UseConcMarkSweepGC
+		7,	着重实现了标记的过程可分为
+			a,	初始标记
+			b,	并发标记(和用户线程一起)
+			c,	重新标记
+			d,	并发清除
+		8，	特点；
+			a,	降低停顿
+			b,	影响整体吞吐量和性能
+			c,	清理不彻底
+			d,	不能在空间快满时再清理
+				-XX:CMSInitiatingOccupancyFraction (百分比)
+				concurrent mode failure
+				使用串行收集器作为后备
