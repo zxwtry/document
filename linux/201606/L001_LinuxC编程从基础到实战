@@ -767,4 +767,39 @@
 					perror(argv[0]);
 					return 0;
 				}
+	046	C语言的标准输入和输出函数
+		1,	标准输出函数printf
+			#include<stdio.h>
+			int printf(const char *format, ...);
+		2,	printf函数的type参数
+			D	有符号十进制数
+			U	无符号十进制数
+			O	无符号八进制数
+			x	无符号十六进制数，使用小写
+			X	无符号十六进制数，使用大写
+			f	格式为[-]ddd.ddd的浮点数
+			e	格式为[-]ddd.ddde+dd的浮点数
+			E	格式为[-]ddd.dddE+dd的浮点数
+			g	使用f或者e中比较合适形式的浮点数
+			G	使用f或者E中比较合适形式的双精度值
+			c	单字符常数
+			s	字符串常数
+			p	指针，格式t:aaaa，其中aaaa为十六进制的地址，t为存储类型
+			n	无输出，但是在下一参数所指整数中写入字符串
+			%	"%"字符
+		3,	b, B, l, L用于type之前，说明整型d, i, u, o, x, X的char或者long转换。		4,	flags是标记，printf函数的flags参数
+			-		左对齐
+			+		有符号，整值总是以正负号开始
+			空格	数字总是以符号或者空格开始
+			*		忽略
+	047	C语言的时间处理
+		#include<time.h>
+		char *asctime(const struct tm *tm);
+		char *asctime_r(const struct tm *tm, char *buf);
+		char *ctime(const time__t *timep);
+		char *ctime_r(const time_t *timep);
+		struct tm *gmtime(const time_t *timep);
+		struct tm *gmtime_r(const time_t *timep);
+		struct tm *localtime(const time_t *timep);
+		struct tm *localtime_r(const time_t *timep, struct tm *result);
 
