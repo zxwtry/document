@@ -278,3 +278,149 @@ n043:	JDK中ClassLoader默认设计模式-协同工作
 				}
 			}
 		}
+n044:	是否能只用反射，仿照上面的写法，将类注入启动ClassLoader呢?
+		上面是指store/demo/201607/D011
+n045:	1,	自底向上检查类是否已经加载
+		2,	自顶向下尝试加载类
+		双亲模式的问题：
+			1,	顶层ClassLoader，无法加载底层ClassLoader的类。
+			2,	Java框架(rt.jar)如何加载应用的类?
+			3,	javax.xml.parsers包中定义了xml解析的类接口Service Provider Interface SPI位于rt.jar即接口在启动ClassLoader中。而SPI的实现类，在AppLoader。
+n046:	Thread.setContextClassLoader()
+		1,	上下文加载器
+		2,	是一个角色
+		3,	用以解决顶层ClassLoader无法访问底层ClassLoader的类的问题。
+		4,	基本思想，在顶层ClassLoader中，传入底层ClassLoader的实例。
+n047:	ClassLoader cl;
+		cl.loadClass(className);	//使用上下文加载器
+		上下文加载其可以突破双亲模式的局限性。
+n048:	双亲模式的破坏：
+		1,	双亲模式是默认的模式，但不是必须这么做。
+		2,	Tomcat的WebappClassLoader就会先加载自己的Class，找不到再委托parent
+		3,	OSGi的ClassLoader形成网状结构，根据需要自由加载Class
+n049:	破坏双亲模式例子-先从底层ClassLoader加载
+		OrderClassLoader的部分实现
+		protected synchronized Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
+			// First, check if the class has already been loaded
+			Class re = findClass(name);
+			if (re == null) {
+				System.out.println("无法载入类："+name+"需要请求父加载器");
+				return super.loaderClass(name, resolve);
+			}
+			return re;
+		}
+		proteceted Class<?> findClass(String className) throws ClassNotFoundException {
+			Class clazz = this.findLoadedClass(className);
+			if (null ==  clazz) {
+				try {
+					String classFile = getClassFile(className);
+					FileInputStream fis = new FileInputStream(classFile);
+					FileChannel fileC = fis.getChannel();
+					ByteArrayOutputStream baos = new ByteArrayOutputStream();
+					WritableByteChannel outC = Channels.newChannel(baos);
+					ByteBuffer buffer = ByteBuffer.allocateDirect(1024);
+					// 这里省略了很多代码
+					fis.close();
+					byte[] bytes = baos.toByteArray();
+					clazz = defineClass(className, bytes, 0, bytes.length);
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			return clazz;
+		}
+n050:	热替换
+		含义：
+		1,	当一个class被替换后，系统无需重启，替换的类立即生效
+		2,	例子:
+			public class CVersionA {
+				public void sayHello() {
+					System.out.println("hello world!(version A)");
+				}
+			}
+			PHP天生热替换
+			a,	DoopRun不停调用CVersionA.sayHello()方法，因此有输出：
+			b,	在DoopRun的运行过程中，替换为CVersionA为：
+				public class CVersionA {
+					public void sayHello() {
+						System.out.println("hello world!(version B)");
+					}
+				}
+			c,	替换后，DoopRun的输出变为
+				hello world!(version B)
+n051:	性能监控工具
+		1,	系统性能监控
+			确定系统运行的整体状态，基本定位问题所在
+		2,	Java自带的工具
+			查看Java程序运行细节，进一步定位问题
+		3,	实战分析
+n052:	linux uptime
+		系统时间	运行时间	连接数	1,5,15分钟内的系统平均负载(运行队列中的平均进程数)
+n053:	linux top
+n054:	vmstat [采样频率] [采样次数]
+		可以统计系统的CPU，内存，swap，io等情况
+		CPU占用率很高，上下文切换频繁，说明系统有线程正在频繁切换。
+n055:	pidstat
+		1,	细致观察进程
+		2,	apt-get install sysstat
+		3,	监控CPU
+		4,	监控IO
+		5,	监控内存
+		6,	pidstat -p 2962 -u 1 3
+			-p		进程
+			2962	进程id
+			-u		查看cpu
+			
+			pidstat -p 2962 -u 1 3 -t
+			-t		显示线程
+		7,	pidstat -p 3165 1 3 -d -t
+			-d 		硬盘IO
+n056:	Windows pslist
+		1,	命令行工具
+		2,	可用于自动化数据收集
+		3,	显示java程序的运行情况
+		pslist -d
+n057:	Java自带的工具-jps
+		1,	列出Java进程，类似ps
+		2,	参数-p可以指定jps只输出进程ID，不输出类的短名称
+		3,	参数-m可以用于输出传递给Java进程(主函数)的参数
+		4,	参数-l可以用于输出主函数的完整路径
+		5,	参数-v可以显示传递给JVM的参数
+n058:	jinfo
+		1,	可以用来查看正在运行的Java应用程序的扩展参数，甚至支持在运行时，修改部分参数
+		2,	-flag <name> : 打印指定JVM的参数值
+		3,	-flag [+|-] <name> : 设置指定JVM参数的布尔值
+		4,	-flag <name> = <value> : 设置指定JVM参数的值
+		5,	显示了新生代对象晋升到老年代对象的最大年龄
+			jinfo -flag MaxTenuringThreshold 2972
+			输出：-XX:MaxTenuringTreshold=15
+		6,	显示是否打印GC详细信息
+			jinfo -flag PrintGCDetails 2972
+			输出：-XX:-PrintGCDetails
+		7,	运行时修改参数，控制是否输出GC日志
+			jinfo -flag PrintGCDetails 2972
+			输出：-XX:-PrintGCDetails
+			jinfo -flag +PrintGCDetails 2972
+			jinfo -falg PrintGCDetails 2972
+			输出：-XX:+PrintGCDetails
+n059:	jmap
+		1,	生成Java应用程序的堆快照和对象的统计信息
+		2,	jmap -histo 2972 >c:\s.txt
+n060:	Dump堆
+			jmap -dump:format=b,file=c:\heap.hprof 2972
+n061:	jstack
+		1,	打印线程dump
+		2,	-l	打印锁信息
+		3,	-m	打印java和native的帧信息
+		4,	-F	强制dump，当jstack没有响应时使用
+		5,	jstack 120 >> C:\a.txt
+n062:	JConsole
+		1,	图形化监控工具。
+		2,	可以查看Java应用程序的运行概况。监控堆信息，永久区使用情况，类加载情况等。
+n063:	Visual VM
+		1,	Visual VM是一个功能强大的多合一故障诊断和性能监控的可视化工具。
+		2,	性能监控：找到占用CPU时间最长的方法
+		3,	死锁  红色
+		4,	分析堆Dump文件
