@@ -797,9 +797,69 @@
 		char *asctime(const struct tm *tm);
 		char *asctime_r(const struct tm *tm, char *buf);
 		char *ctime(const time__t *timep);
-		char *ctime_r(const time_t *timep);
+		char *ctime_r(const time_t *timep, char *buf);
 		struct tm *gmtime(const time_t *timep);
 		struct tm *gmtime_r(const time_t *timep);
 		struct tm *localtime(const time_t *timep);
 		struct tm *localtime_r(const time_t *timep, struct tm *result);
-
+		time_t mktime(struct tm *tm);
+		int gettimeofday(struct timeval *tv, struct timezone *tz);
+		int settimeofday(const struct timeval *tv, const struct timezone *tz);
+	048	asctime函数：将参数timeptr所指的tm结构转换成真实世界所使用的
+			时间日期表示方法，返回字符串。"Wed Jun 30 21:49:08 1993/n"
+			tm时间信息结构体说明如下：
+			struct tm {
+				int tm_sec;			//秒
+				int tm_min;			//分钟
+				int tm_hour;		//小时
+				int tm_mday;		//日期
+				int tm_mon;			//月份
+				int tm_year;		//年份
+				int tm_wday;		//星期
+				int tm_yday;		//从1月1日开始到当前日期编号
+				int tm_isdst;		//夏令时标识符，实行夏令时的时候，为正
+									//			  不实行夏令时的时候，为0
+									//			  不明真相的吃瓜群众，为负
+			};
+		asctime_r函数：是asctime函数的一个拓展，提供了一个缓冲器buf用于存放返回
+			值，该缓冲区的长度不能低于26个字节。
+		ctime函数：将参数timep所指的time_t结构中的信息转换成真实世界所使用的
+			时间日期表示方法，然后将结果以字符串形态返回。此函数已经由时区转换
+			成当地时间，字符串的格式是"Wed Jun 30 21:49:08 1993/n"。若再调用
+			相关的时间日期函数，此字符串可能会被破坏。
+		ctime_r函数：和ctime函数功能相同，提供一个缓冲区用于存放返回值。
+		gmtime函数：将所指的time_t结构中的信息转换为真实世界所使用的时间日期
+			表示方法，然后将结果返回到tm结构体中。
+		gmtime_r函数：
+		localtime函数：当地的目前时间和日期，其将参数timep所指的结构体中的信息
+			转换真实世界所使用的时间日期表示方法，然后返回。
+		localtime_r函数：
+		mktime函数：将参数tm所指向的结构体数据转换为从1970年1月1日0时0分0秒开始
+			经历的秒数，然后返回。
+		gettimeofday：获取当前时间和时区信息，这个需要超级用户的权限，tv参数
+			用于指向存放返回时间信息的缓冲区，对其结构说明如下：
+			struct timeval {
+				time_t    		tv_sec;		//秒
+				suseconds_t 	tv_usec;	//微秒
+			};
+			tz用于存放相应的时钟信息，说明如下：
+			struct timezone {
+				int tz_minuteswest;   //minutes est of Greewich
+				int tz_dsttime;       //type of DST correction
+			};
+		settimeofday：用于设置当前时间和时区信息，其参数和使用方法参考gettimeofday
+	049	Linux时间实例
+		主要调用time localtime 和 asctime函数。处理过程是：通过gmtime函数获得
+		当前的秒数，然后通过asctime函数得到正常的显示格式。
+		#include<stdio.h>
+		#include<time.h>
+		int main() {
+			time_t temp;
+			char *wday[] = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
+			struct tm *p;
+			time(&temp);
+			printf("%s\n", asctime(gmtime(&temp)));
+			p = localtime(&temp);
+			printf("%d", p->wday);
+			return 0;
+		}
