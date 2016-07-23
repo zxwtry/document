@@ -881,3 +881,27 @@
 			printf("程序使用时间：%d\n", (time2.tv_usec - time1.tv_usec));
 			return 0;
 		}
+	051	Linux内存
+		malloc	申请连续内存，不初始化为0
+		calloc	为有指定流处理数和特定长度的对象分配内存，初始化为0
+		realloc	增加或者减少内存。如果是增加，可能会先复制到一块空闲区，再申请
+				新申请的内存，不初始化为0
+		free	释放内存
+		#include<stdlib.h>
+		void *malloc(size_t size);
+		void *calloc(size_t nobj, size_t size);
+		void *realloc(void* ptr, size_t new_size);
+		void free(void* ptr);
+		// realloc中new_size指的是新申请的长度，而不是申请之后的总长度
+		// 如果realloc中ptr是一个null的话，realloc和malloc是一样的。
+		这三个函数都是通过sbrk系统调用来实现，系统调用的格式如下：
+		#include<unistd.h>
+		int brk(void *addr);
+		void *sbrk(intptr increment);
+	052	系统调用
+		Linux系统提供内建函数用以完成对内核的调用，叫systemcall。在包syscall.h
+		里面，对应的是一系列数字，每一个数字对应system_call_table[]里面的一个
+		调用。Linux内核通过位于0x80中断来管理这些系统调用；当系统调用运行时，
+		对应数字和相关参数会存放到寄存器中。
+		具体实现：Linux在C库函数中实现了和系统调用名称一样的函数，用户写代码的
+		时候，能够直接调用这些函数。这些函数运行过程会调用内核完成系统
