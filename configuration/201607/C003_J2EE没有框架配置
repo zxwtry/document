@@ -23,3 +23,4 @@
 配置004:    使用form提交表单的时候enctype的选择
     如果是需要上传文件等等，使用"multipart/form-data"
     如果是简单的账户和密码：使用"application/json"或"text/plain"
+配置005:	出现莫名事件，浏览器刷新刷新<F5><F5><F5>
