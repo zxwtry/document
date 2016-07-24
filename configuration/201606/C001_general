@@ -232,3 +232,8 @@ Linux 自行安装jdk
 配置028：第一列的颜色和其他列都不一样，在任何文件上都这样，怎么恢复？
     这个原因是执行了1,$s/^/#/g这个命令之后，第一行颜色就和其他的不一
     样。想想这个代码也是够魔性的。恢复的方法是let @/ = ""
+配置029	eclipse alt+shift+x j运行java代码，默认情况可能会自动保存已经编辑的文件
+		也有可能不会；最好这样去设置：
+		preferences>run/debug>launching里面
+		save required dirty editors before launching
+		选择always
