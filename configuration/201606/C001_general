@@ -237,3 +237,5 @@ Linux 自行安装jdk
 		preferences>run/debug>launching里面
 		save required dirty editors before launching
 		选择always
+
+配置029	ibus经常会抽风，注意ibus中使用英文模式和纯英文输入基本一样(到现在没有发现不同)，不要经常切换输入法!
