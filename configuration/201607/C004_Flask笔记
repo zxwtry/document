@@ -30,5 +30,9 @@
 			virtualenv venv --distribute
 			. venv/bin/activate
 			pip install -i http://mirrors.aliyun.com/pypi/simple Flask==dev
-	
-
+03	最小的应用
+	1,	见demo01_mini.py文件
+		打开内部浏览器能够访问http://127.0.0.1:5000/
+		但是通过win7（主机）不能够通过ip访问
+	2,	代码的作用：
+		a,	
