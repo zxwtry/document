@@ -81,3 +81,39 @@
 	6,	如果信任一个变量，并且知道它是安全的(例如一个模块把wiki标记切换到HTML)，可以用Markup类或lsafe过滤器在模板中标记它是安全的。多看Jinja2文档。
 06	如果是同一个链接@app.route('/main/') @app.route('/main/<name>') @app.route('/main')
 	第3个是会出问题的。记住就好。
+07	接受请求数据
+	Flask的全局对象:request，线程安全(上下文作用域)
+	1,	局部上下文
+		Flask中某些对象是全局对象，但不是通常的类型。这些对象实际上是给定上下文的局部对象的代理。
+		线程处理上下文的过程： 
+			a,	一个请求进入
+			b,	web服务器产生一个线程(或者其他东西，底层对象比线程更有能力处理并发系统)
+			c,	当Flask开始内部请求处理时，认定当前线程是活动的上下文并绑定到当前线程。绑定的内容：当前应用和WSGI环境。
+			d,	绑定非常重要，能够保证一个应用可以调用另一个应用不会中断
+		单元测试：(在不是单元测试的环境下，如何处理上下文是不需要考虑的)
+			a,	依赖于请求对象的代码会突然中断，原因是没有请求对象。
+			b,	针对单元测试的最早解决方案是：test_request_context()上下文管理器。
+				结合with声明，绑定一个测试请求进行交互。
+				from flask import request
+				with app.test_request_context("/hello", method='Post')
+					#现在可以做出请求，比如基本的断言
+					assert request.path='/hello'
+					assert request.method='POST'
+			c,	另一个可能性，就是传入整个WSGI环境到request_context()方法:
+				from flask import request
+				with app.request_context(environ):
+					assert request.method='POST'
+	2,	请求对象
+		a,	需要从flask模块中导入request
+			from flask import request
+		b,	当前请求的方法可以用method属性来访问。可以用form属性来访问表单数据(数据在POST或者PUT中传输)。
+			@app.route('/login', methods=['POST', 'GET'])
+			def login():
+				error=None
+				if request.method=='POST':
+					if valid_login(request.form['username'], request.form['password']):
+						return log_the_user_in(request.form['username'])
+					else:
+						error='Invalid username/password'
+				#当请求形式为"GET"或者认证失败则执行以下代码
+				return render_template('login.html', error=error)
