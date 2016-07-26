@@ -64,3 +64,20 @@
 		b,	POST	一次
 		c,	PUT		多次覆盖
 		d,	HEAD	只要头，底层Werkzeug库会处理
+04	静态文件
+	1,	在有flask和venv文件夹的目录文件中，新建一个static文件夹，启动服务器之后
+	，输入/static/***.html即可访问。
+	2,	给静态文件生成URL，使用特殊的static端：
+		url_for('static', filename='style.css')
+		这个文件应该是static/style.css
+	3,	如果app.route('string')的string中如果含有.的话，这个好像是不会被解析的。
+	4,	如果static/aabbcc是一个文件的话，访问就是下载的意思，貌似最后多加一个'/'也是支持的。
+05	渲染模板
+	1,	Flask配置好Jinja模块，用于生成html文件。
+	2,	可以使用方法render_template()来渲染模板。
+	3,	在模板中可以使用request，session和g对象，也能使用函数get_flashed_messages()
+	4,	需要学习模板继承，实现特定元素(如：标题，导航和页脚)在每一页成为可能
+	5,	自动转义默认开启，如果name包含html，那么是会自动转义的。
+	6,	如果信任一个变量，并且知道它是安全的(例如一个模块把wiki标记切换到HTML)，可以用Markup类或lsafe过滤器在模板中标记它是安全的。多看Jinja2文档。
+06	如果是同一个链接@app.route('/main/') @app.route('/main/<name>') @app.route('/main')
+	第3个是会出问题的。记住就好。
