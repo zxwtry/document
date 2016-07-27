@@ -228,7 +228,6 @@ Linux 自行安装jdk
             URIEncoding="UTF-8"
             redirectPort="443" />
     f,  sudo service tomcat7 restart
-
 配置028：第一列的颜色和其他列都不一样，在任何文件上都这样，怎么恢复？
     这个原因是执行了1,$s/^/#/g这个命令之后，第一行颜色就和其他的不一
     样。想想这个代码也是够魔性的。恢复的方法是let @/ = ""
@@ -237,5 +236,10 @@ Linux 自行安装jdk
 		preferences>run/debug>launching里面
 		save required dirty editors before launching
 		选择always
-
-配置029	ibus经常会抽风，注意ibus中使用英文模式和纯英文输入基本一样(到现在没有发现不同)，不要经常切换输入法!
+配置030	ibus经常会抽风，注意ibus中使用英文模式和纯英文输入基本一样(到现在没有发现不同)，不要经常切换输入法!
+配置031	Python 2.7 错误信息：UnicodeDecodeError: 'ascii' codec can't decode byte 0xe7 in position 0: ordinal not in range(128)
+		import sys
+		reload(sys)
+		sys.setdefaultencoding('utf-8')
+		原因是：Python 2.x中str仍然默认ascii编码,在Python 3中已经更改为unicode编码
+		在Python 3中不会出现这个问题。
