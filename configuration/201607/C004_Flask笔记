@@ -117,3 +117,21 @@
 						error='Invalid username/password'
 				#当请求形式为"GET"或者认证失败则执行以下代码
 				return render_template('login.html', error=error)
+	3,	通过f=request.files['name']对象的f.filename是能够获得file的名称。但是这种方式是能够进行修改的。正确的使用方式是：
+		a,	引入werkzeug中的secure_filename from werkzeug import secure_filename
+		b,	使用secure_filename(f.filename)这样能够保证获得的filename是没有被修改的。
+	4,	cookies
+		a,	通过request.cookies来获得cookies，通过make_response.set_cookie来进行cookies的设置。
+		b,	如果需要使用sessions，不要使用cookies
+		c,	获得cookies的demo
+			@app.route('/')
+			def index():
+				my_cookies=request.cookies.get('username']
+				#在这里不使用cookies['username']的原因是避免在username不存在的情况下，报keyerror
+		d,	设置cookies的demo
+			from flask import make_response, render_template
+			@app.route('/')
+			def index():
+				my_make_response=make_response(render_template('index.html'), username='zxwtry')
+				my_make_response.set_cookie('username', 'the username cookie')
+				return my_make_response;
