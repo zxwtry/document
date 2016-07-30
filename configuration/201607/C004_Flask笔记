@@ -135,3 +135,12 @@
 				my_make_response=make_response(render_template('index.html'), username='zxwtry')
 				my_make_response.set_cookie('username', 'the username cookie')
 				return my_make_response;
+	5,	cookie和session的补充，当客户端禁用cookie的时候，服务端如何保证session的维持
+		<form name="testform" action="/***">
+			<input type="hidden" name="jsessionid" value="sessionidvaluedhfahgsodhfsoduihfduhsfod">
+			<input type="text">
+		</form>
+		cookie:	客户端				session:	服务端
+		cookie:	客户能够修改,4k 20	session:	占用服务器内存
+		cookie:						session:	登录信息等重要信息
+	
