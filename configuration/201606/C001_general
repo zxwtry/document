@@ -243,3 +243,4 @@ Linux 自行安装jdk
 		sys.setdefaultencoding('utf-8')
 		原因是：Python 2.x中str仍然默认ascii编码,在Python 3中已经更改为unicode编码
 		在Python 3中不会出现这个问题。
+
