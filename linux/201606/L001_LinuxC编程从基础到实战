@@ -943,4 +943,14 @@
 			#define STDOUT_FILENO	1	//标准输出
 			#define STDERR_FILENO	2	//标准错误输出
 	057	文件执行open之后，一定要执行close
-		1,		
+		1,	open的定义：
+			#include<sys/types.h>
+			#include<sys/stat.h>
+			#include<fcntl.h>
+			int open(const char *pathname, int flag);				//打开一个现有的文件
+			int open(const char *pathname, int flag, mode_t mode);	//如果文件不存在先创建
+		2,	flag常量
+			O_RDONLY			只读
+			O_WRONLY			只写
+			O_RDWR				读写
+			O_
