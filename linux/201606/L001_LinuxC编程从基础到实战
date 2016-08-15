@@ -949,8 +949,19 @@
 			#include<fcntl.h>
 			int open(const char *pathname, int flag);				//打开一个现有的文件
 			int open(const char *pathname, int flag, mode_t mode);	//如果文件不存在先创建
-		2,	flag常量
-			O_RDONLY			只读
-			O_WRONLY			只写
-			O_RDWR				读写
-			O_
+		2,	flag常量一
+			O_RDONLY			只读		0
+			O_WRONLY			只写		1
+			O_RDWR				读写		2
+			这三个常量不能够使用OR
+			这三个常数必须使用一个
+			打开文件的时候，必须指定flag
+			如果权限不足，将会返回错误
+		3,	flag常量二
+			这里的常量可以使用OR
+			O_CREATE	文件不存在的时候，将建立该文件，此时一定会使用到mode_t(第三个参数)
+			O_EXCL		如果同时指定了O_CREATE，且文件已经存在，则会出错。
+						此选项可以测试一个文件是否存在
+						如果不存在，则创建此文件
+			O_NOCTTY	当文件名(可以包含路径，即第一个参数pathname)指向一个终端设备，它将不再是进程控制的终端，即使该进程没有一个终端设备。
+			
