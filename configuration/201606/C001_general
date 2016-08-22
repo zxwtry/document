@@ -243,4 +243,6 @@ Linux 自行安装jdk
 		sys.setdefaultencoding('utf-8')
 		原因是：Python 2.x中str仍然默认ascii编码,在Python 3中已经更改为unicode编码
 		在Python 3中不会出现这个问题。
+配置032	CAJ阅读器右上侧出现一个很占空间的广告
+		My Document --> My ebooks ---> 找到ads.html 删除里面的内容并将文件设置为只读就能够避免广告。
 
