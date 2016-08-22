@@ -110,4 +110,14 @@ title:	聊聊高并发系统之HTTP缓存
 													r->headers_out.content_length_n)
 	到此简单的基于文档修改时间和过期时间的缓存控制介绍完了。
 	在内容型相应，大多数根据内容的修改时间进行缓存控制，ETag根据实际需求而定。
-	还可以使用html Meta标签控制浏览器缓存，但是对于代理层缓存无效，因此不建议使用。
+	还可以使用html meta标签控制浏览器缓存，但是对于代理层缓存无效，因此不建议使用。
+11	总结
+	1,	服务器响应的Last-Modified会在下次请求时以If-Modified-Since请求头带到服务端进行文档是否修改的验证，如果没有修改则返回304，浏览器可以直接使用缓存内容。
+	2,	Cache-Control:max-age和Expires用于决定浏览器内容缓存多久，即多久过期，过期后则删除缓存重新从服务器获取最新的；另外可以用于from cache场景。
+	3,	http/1.1规范定义的Cache-Control优先级高于http/1.0规范定义的Expires。
+	4,	一般情况下，Expires=当前系统时间+缓存(Cache-Control:max-age)。
+	5,	http/1.1规范定义了ETag来通过文档摘要的方式控制。
+	6,	Last-Modified和ETag同时使用时，浏览器在验证时会同时发送If-Modified-Since和If-None-Match，
+		按照http/1.1规范，如果同时使用If-Modified-Since和If-None-Match则服务端必须两个都验证通过后
+		才能返回304；且nginx就是这样做的。实际情况可以做变通。
+12	接下来的是nginx的配置，没有学习过nginx，今后再看。
