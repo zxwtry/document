@@ -264,4 +264,6 @@ Linux 自行安装jdk
             明明能够mysql -u root -p进去MYSQL，但是无法关闭服务
             系统中有两个mysql服务，叫mysql的这个没启用，去services中看是正在服务的是哪个名字。
             再去net stop [mysql服务的名字]
-
+配置035 windows开启AP：
+        netsh wlan set hostednetwork mode=allow ssid=name key=passwd
+        netsh wlan start hostednetwork
