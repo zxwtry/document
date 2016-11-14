@@ -245,7 +245,7 @@ Linux 自行安装jdk
 		在Python 3中不会出现这个问题。
 配置032	CAJ阅读器右上侧出现一个很占空间的广告
 		My Document --> My ebooks ---> 找到ads.html 删除里面的内容并将文件设置为只读就能够避免广告。
-配置033 MYSQL远程登陆：
+配置033 MySQL远程登陆：
         1。 改表法。可能是你的帐号不允许从远程登陆，只能在localhost。
             这个时候只要在localhost的那台电脑，登入mysql后，
             更改 "mysql" 数据库里的 "user" 表里的 "host" 项，从"localhost"改称"%"
@@ -261,9 +261,13 @@ Linux 自行安装jdk
 配置034 net start/stop mysql服务名不存在
         myqsld -install是可能的解决办法
         还有一种可能是：
-            明明能够mysql -u root -p进去MYSQL，但是无法关闭服务
+            明明能够mysql -u root -p进去MySQL，但是无法关闭服务
             系统中有两个mysql服务，叫mysql的这个没启用，去services中看是正在服务的是哪个名字。
             再去net stop [mysql服务的名字]
 配置035 windows开启AP：
         netsh wlan set hostednetwork mode=allow ssid=name key=passwd
         netsh wlan start hostednetwork
+配置036 MySQL5.7密码设置：
+    安装好了之后，在data目录下有一个[用户名].err的文件。
+    打开这个文件，搜索password，会找到一个临时password。
+    mysql -u root -p进去之后，alter user 'root'@'localhost' identified by 'new password';
