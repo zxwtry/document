@@ -271,3 +271,22 @@ Linux 自行安装jdk
     安装好了之后，在data目录下有一个[用户名].err的文件。
     打开这个文件，搜索password，会找到一个临时password。
     mysql -u root -p进去之后，alter user 'root'@'localhost' identified by 'new password';
+配置037 Java Eclipse的注释文件配置：
+    1,  配置的路径在：Preferences --> Java --> Code Style --> Code Templates --> Comments
+    2,  配置Types，如下：
+			/**
+			 * @auther      zxwtry
+			 * @email       zxwtry@qq.com
+			 * @project     ${project_name}
+			 * @package     ${package_name}
+			 * @file        ${file_name}
+			 * @date        ${date} ${time}
+			 * @details     
+			 */
+    3,  配置Methods，如下：
+			/**
+			 * @method      ${enclosing_method} 
+			 * @parameter   
+			 * @return      ${return_type}
+			 * @details     
+			 */
