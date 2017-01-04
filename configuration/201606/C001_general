@@ -194,7 +194,7 @@ Linux 自行安装jdk
     StrictHostKeyChecking no
 
 配置024：更换源为aliyun，参照如下进行配置
-     http://mirrors.aliyun.com/ubuntu/
+    http://mirrors.aliyun.com/help/ubuntu/
 
 配置025: 腾讯云将网址和IP进行绑定
     云解析 --> 添加www --> 选择自己的服务器 --> traceroute www.zxwtry.com
@@ -290,3 +290,19 @@ Linux 自行安装jdk
 			 * @return      ${return_type}
 			 * @details     
 			 */
+
+配置038 java -jar *.jar的运行方式：
+    1,  将依赖的jar包添加到%JRE_HOME%/lib/ext/目录中。
+        这个目录下的jar包会在Bootstrap Classloader工作完后
+        由Extension Classloader来加载。
+    2,  生成jar文件之后，以zip方式解压出来。
+        修改META-INF文件夹中的MANIFEST.MF文件，
+        添加如下内容：
+        Class-Path: lib/A.jar lib/B.jar
+    3,  使用Bootstrap Classloader来加载这些类
+        -Xbootclasspath:完全取代系统Java classpath最好不用。
+        -Xbootclasspath/a:在系统class加载后加载，一般用这个。
+        -Xbootclasspath/p:在系统class加载前加载，可能会和系统类冲突。
+        win32 java -Xbootclasspath/a: A.jar;B.jar; -jar test.jar
+        unix  java -Xbootclasspath/a: A.jar:B.jar: -jar test.jar
+        区别：win32每个jar用分号隔开，unix每个jar用冒号隔开
