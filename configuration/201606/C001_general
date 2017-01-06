@@ -389,3 +389,6 @@ Linux 自行安装jdk
         点击users会弹出添加新用户对话框，设置username、password。 
     3,  创建仓库
         点击repositories，右键，创建新的仓库。文件系统选择Regular FSFS repository。
+    4,  Eclipse中使用SVN
+        安装Eclipse SVN插件
+        到Eclipse Market搜索SVN，找到Subversive-SVN Team Provider插件，安装即可
