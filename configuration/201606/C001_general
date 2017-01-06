@@ -392,3 +392,9 @@ Linux 自行安装jdk
     4,  Eclipse中使用SVN
         安装Eclipse SVN插件
         到Eclipse Market搜索SVN，找到Subversive-SVN Team Provider插件，安装即可
+    5,  首先在Eclipse创建一个Java工程:
+        把这个java 工程提交到SVN。单击工程名，右键，
+        team->Share Project->SVN->Create a new repository,之后会弹出来一个如下所示的对话框。
+        URL是SVN服务器上的仓库地址(仓库地址可以通过单击仓库名称，右键，
+        ”Copy URL to Clipboard”获取，获取的是本机的pc名加svn 
+        地址:https://elk-PC/svn/ucas/，用本机IP替换pc名:https://192.168.1.102/svn/ucas )：
