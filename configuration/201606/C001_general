@@ -356,3 +356,8 @@ Linux 自行安装jdk
 		DocumentRoot documentroot位置  
 		ServerName host.cn  
 		</VirtualHost>  
+    *.*.*.*指的是你的服务器的IP地址，这里用的ipv4的格式。
+        documentroot位置不知道怎么写的话，可以搜索这个httpd.config 文件，里面有Document Root的值，如果不行的话，那么再改也比较好定位。
+        意思就是，通过IP访问，deny；通过www.host.cn域名访问，可以;通过host.cn访问，也可以。
+    2,  重启服务：
+        service httpd restart
