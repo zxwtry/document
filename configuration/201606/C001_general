@@ -398,3 +398,9 @@ Linux 自行安装jdk
         URL是SVN服务器上的仓库地址(仓库地址可以通过单击仓库名称，右键，
         ”Copy URL to Clipboard”获取，获取的是本机的pc名加svn 
         地址:https://elk-PC/svn/ucas/，用本机IP替换pc名:https://192.168.1.102/svn/ucas )：
+    6,  文件更新、对比
+        本地代码更新以后，如何同步到SVN呢？
+        更新文件后commit
+        新增的文件或者本地文件修改以后，单击该文件然后右键,Team-Commit，之后填写注释，提交即可。
+        一个项目一般会有多个人同时开发，如果线上的代码更新，如何把本地文件和SVN服务器上的文件对比呢？ 
+        可以单击文件名，右键->Team->Synchronize With Repository,选择SVN中的文件和本地文件进行对比。
