@@ -380,3 +380,9 @@ Linux 自行安装jdk
         GRANT ALL PRIVILEGES ON *.* TO 'myuser'@'%' IDENTIFIED BY 'mypassword WITH GRANT OPTION; 
         如果你想允许用户myuser从ip为192.168.1.3的主机连接到mysql服务器，并使用mypassword作为密码
         GRANT ALL PRIVILEGES ON *.* TO 'myuser'@'192.168.1.3' IDENTIFIED BY 'mypassword' WITH GRANT OPTION; 
+
+配置042 SVN服务器配置
+    1,  下载与安装
+        到VISUALSVN SERVER官网下载SVN服务器安装包,下载地址:https://www.visualsvn.com/server/download/
+        下载后一路下一步，之后启动VisualSVN Server Manager。 
+    
