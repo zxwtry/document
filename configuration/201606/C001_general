@@ -306,3 +306,33 @@ Linux 自行安装jdk
         win32 java -Xbootclasspath/a: A.jar;B.jar; -jar test.jar
         unix  java -Xbootclasspath/a: A.jar:B.jar: -jar test.jar
         区别：win32每个jar用分号隔开，unix每个jar用冒号隔开
+
+配置039 Linux配置VPN客户端(Cent OS 版)
+    1， 安装服务
+        yum install -y pptp*
+    2,  ppp-on.sh
+        #ppp-on.sh  
+        #!/bin/bash  
+        /usr/sbin/pptpsetup -create vpn -server xxxx.cn  -username xxx -password xxx -encrypt -start  
+        sleep 10  
+        /sbin/route add -net 192.168.1.0 netmask 255.255.255.0 dev eth0  
+        /sbin/route add -net 192.168.88.0 netmask 255.255.255.0 dev ppp0  
+    3,  ppp-off.sh
+        #!/bin/bash  
+        if [ "$1" = "" ]; then  
+            DEVICE=ppp0  
+        else  
+            DEVICE=$1  
+        fi  
+        if [ -r /var/run/$DEVICE.pid ]; then  
+            kill -INT `cat /var/run/$DEVICE.pid`  
+            if [ !"$?" = "0" ]; then  
+                rm -rf /var/run/$DEVICE.pid  
+                echo “ERROR: Removed stale pid file”  
+                exit 1  
+            fi  
+            echo “PPP link to $DEVICE terminated.”  
+            exit 0  
+        fi  
+        echo “ERROR: PPP link is not active on $DEVICE”  
+        exit 1  
