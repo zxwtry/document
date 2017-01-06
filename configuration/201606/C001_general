@@ -361,3 +361,12 @@ Linux 自行安装jdk
         意思就是，通过IP访问，deny；通过www.host.cn域名访问，可以;通过host.cn访问，也可以。
     2,  重启服务：
         service httpd restart
+
+配置041 远程访问server2008 R2服务器Mysql等同类型数据库设置问题解决方案
+    1,  更改 “MySQL” 数据库里的 “user” 表里的 “host” 项，从”localhost”改称'%'。
+        或者新加条记录，“host” 项为要访问的ip地址，并授权，最好是修改执行。重启mysql服务（这个必须重启，否则没效果）。
+    2,  在系统防火墙添加例外端口：3306，并允许例外。
+    错误提示：
+        ERROR 1130: Host '192.168.1.3' is not allowed
+        to connect to this MySQL server 
+    这里和配置033类似。
