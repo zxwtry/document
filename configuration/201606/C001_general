@@ -404,3 +404,9 @@ Linux 自行安装jdk
         新增的文件或者本地文件修改以后，单击该文件然后右键,Team-Commit，之后填写注释，提交即可。
         一个项目一般会有多个人同时开发，如果线上的代码更新，如何把本地文件和SVN服务器上的文件对比呢？ 
         可以单击文件名，右键->Team->Synchronize With Repository,选择SVN中的文件和本地文件进行对比。
+    7,  导入SVN工程到Eclipse
+		把本地的工程删除，演示一下如何从SVN仓库中下拉代码到Eclipse中。
+		第一步，file->import->SVN->Project from SVN
+		然后Create a new repository，填写SVN工程地址：
+		点击finish之后会弹出”Check Out As”对话框。这一步用于设置导入的工程类型，选择第一个：
+		下一步会弹出工程类型的选择，这一步要结合工程类型来选择，因为代码是java工程，选择Java Project即可。
