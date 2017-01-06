@@ -336,3 +336,23 @@ Linux 自行安装jdk
         fi  
         echo “ERROR: PPP link is not active on $DEVICE”  
         exit 1  
+
+配置040 配置apache禁止通过IP访问网站
+    1,  找到apache的服务配置文件，httpd.conf，最后加上修改内容：
+        <VirtualHost *.*.*.*>  
+		ServerName *.*.*.*  
+		<Location />  
+		Order Allow,Deny  
+		Deny from all  
+		</Location>  
+		</VirtualHost>  
+		  
+		<VirtualHost *.*.*.*>  
+		DocumentRoot documentroot位置  
+		ServerName www.host.cn  
+		</VirtualHost>  
+		  
+		<VirtualHost *.*.*.*>  
+		DocumentRoot documentroot位置  
+		ServerName host.cn  
+		</VirtualHost>  
