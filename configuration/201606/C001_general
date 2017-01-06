@@ -385,4 +385,7 @@ Linux 自行安装jdk
     1,  下载与安装
         到VISUALSVN SERVER官网下载SVN服务器安装包,下载地址:https://www.visualsvn.com/server/download/
         下载后一路下一步，之后启动VisualSVN Server Manager。 
-    
+    2,  用户管理
+        点击users会弹出添加新用户对话框，设置username、password。 
+    3,  创建仓库
+        点击repositories，右键，创建新的仓库。文件系统选择Regular FSFS repository。
