@@ -416,6 +416,20 @@ Linux 自行安装jdk
     logout -> login
 
 配置044 ubuntu中ibus拼音输入总是双拼的bug
-        尝试安装语言版本
-        ibus-daemon -drx
-        不断安装重启，肯定有一次能成功。
+    尝试安装语言版本
+    ibus-daemon -drx
+    不断安装重启，肯定有一次能成功。
+
+配置045 Linux下编译Vim出现如下错误：
+	checking --with-tlib argument... empty: automatic terminal library selection
+	checking for tgetent in -ltinfo... no
+	checking for tgetent in -lncurses... no
+	checking for tgetent in -ltermlib... no
+	checking for tgetent in -ltermcap... no
+	checking for tgetent in -lcurses... no
+	no terminal library found
+	checking for tgetent()... configure: error: NOT FOUND!
+	      You need to install a terminal library; for example ncurses.
+	      Or specify the name of the library with --with-tlib.
+	解决方法：
+	sudo apt-get install ncurses-dev
