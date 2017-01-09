@@ -410,3 +410,12 @@ Linux 自行安装jdk
 		然后Create a new repository，填写SVN工程地址：
 		点击finish之后会弹出”Check Out As”对话框。这一步用于设置导入的工程类型，选择第一个：
 		下一步会弹出工程类型的选择，这一步要结合工程类型来选择，因为代码是java工程，选择Java Project即可。
+
+配置043 在Bash上输入中文，Invalid UTF-8
+    输入法 -> Preferences -> General -> Half/full width -> Half
+    logout -> login
+
+配置044 ubuntu中ibus拼音输入总是双拼的bug
+        尝试安装语言版本
+        ibus-daemon -drx
+        不断安装重启，肯定有一次能成功。
