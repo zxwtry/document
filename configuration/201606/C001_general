@@ -433,3 +433,5 @@ Linux 自行安装jdk
 	      Or specify the name of the library with --with-tlib.
 	解决方法：
 	sudo apt-get install ncurses-dev
+
+配置046 MySQL注释  bind-address       = 127.0.0.1
