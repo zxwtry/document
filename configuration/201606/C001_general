@@ -246,13 +246,13 @@ Linux 自行安装jdk
 配置032	CAJ阅读器右上侧出现一个很占空间的广告
 		My Document --> My ebooks ---> 找到ads.html 删除里面的内容并将文件设置为只读就能够避免广告。
 配置033 MySQL远程登陆：
-        1。 改表法。可能是你的帐号不允许从远程登陆，只能在localhost。
+        1. 改表法。可能是你的帐号不允许从远程登陆，只能在localhost。
             这个时候只要在localhost的那台电脑，登入mysql后，
             更改 "mysql" 数据库里的 "user" 表里的 "host" 项，从"localhost"改称"%"
             mysql -u root -p
             mysql>use mysql;
             mysql>update user set host = '%' where user = 'root';
-            mysql>select host, user from user;
+            mysql>flush privileges;
         2. 授权法。例如，你想myuser使用mypassword从任何主机连接到mysql服务器的话。
             GRANT ALL PRIVILEGES ON *.* TO 'myuser'@'%' IDENTIFIED BY 'mypassword' WITH GRANT OPTION;
             如果你想允许用户myuser从ip为192.168.1.3的主机连接到mysql服务器，并使用mypassword作为密码
@@ -435,3 +435,13 @@ Linux 自行安装jdk
 	sudo apt-get install ncurses-dev
 
 配置046 MySQL注释  bind-address       = 127.0.0.1
+
+配置047 MySQL 非安装版
+    mysqld install
+    mysqld --initialize
+    mysqld –initialize-insecure
+    net start mysql
+    数据库根目录中，.err文件中有MySQL的初始密码
+    修改密码：set password for root@localhost = password('123'); 
+
+配置048 MySQL url中的&,在MyBatis和Hibernate中要使用url编码，即&amp;
